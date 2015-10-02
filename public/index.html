@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+    <div ui-view></div>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"/>
+
+    <script src="bower_components/ng-prettyjson/src/ng-prettyjson.js"></script>
+    <link rel="stylesheet" href="bower_components/ng-prettyjson/src/ng-prettyjson.css"/>
+
+    <!-- application script -->
+    <script src="app.js"></script>
+
+    <!-- dashboard -->
+    <script src="dashboard/controllers/dashboardController.js"></script>
+    <script src="dashboard/services/dashboardService.js"></script>
+    <script src="dashboard/services/wikidataService.js"></script>
+    <script src="dashboard/services/viafService.js"></script>
+</body>
+</html>
