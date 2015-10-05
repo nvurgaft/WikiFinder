@@ -21,6 +21,11 @@ function config($stateProvider, $urlRouterProvider) {
             url: '/dashboard',
             templateUrl: 'dashboard/dashboard.html',
             controller: 'dashboardController as vm'
+        })
+        .state('main.entry.settings', {
+            url: '/settings',
+            templateUrl: 'options/settings.html',
+            controller: 'settingsController as vm'
         });
 }
 

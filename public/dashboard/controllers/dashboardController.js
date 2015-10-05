@@ -14,6 +14,11 @@ function dashboardController($log, wikidataService) {
     vm.wikidataQueryCollapse = true;
     vm.qidQueryCollapse = true;
 
+    vm.queryFormats = [
+        {name: "json", value: 1},
+        {name: "plain-text", value: 2}
+    ];
+
     vm.queryTypes = [
         {name: "claim", value: 1},
         {name: "noclaim", value: 2},
