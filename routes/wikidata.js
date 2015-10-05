@@ -100,10 +100,12 @@ module.exports = function (router) {
     /**
      * GET a wikidata article using a QID
      */
-    router.get(router_point + '/q/:query', function (req, res) {
+    router.get(router_point + '/q', function (req, res) {
 
         var api_url = "https://www.wikidata.org/w/api.php";
-        var qItem = req.params.query;
+        var qItem = req.query.qItem;
+        var language = req.query.language;
+
         if (_.isNaN(qItem)) {
             // if QID is not a number
             res.json({"error": "QID " + qItem + " is not a number"});
@@ -112,7 +114,7 @@ module.exports = function (router) {
 
         var action = ['action', 'wbgetentities'].join('='),
             ids = ["ids", 'Q' + qItem].join('='),
-            languages = ["languages", "es"].join('='),
+            languages = ["languages", language].join('='),
             format = ["format", "json"].join('=');
 
         var address_params = [action, ids, languages, format].join('&');

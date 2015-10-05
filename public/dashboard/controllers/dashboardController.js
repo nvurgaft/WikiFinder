@@ -3,7 +3,6 @@
  */
 function dashboardController($log, wikidataService) {
     var vm = this;
-    $log.log("starting dashboardController");
 
     vm.wikidataQuery = "";
     vm.qQuery = "";
@@ -37,11 +36,9 @@ function dashboardController($log, wikidataService) {
         vm.sendingQuery = true;
         wikidataService.get(query)
             .then(function (response) {
-                $log.debug("fetched " + JSON.stringify(response.data));
-                var result = "".concat(response.data);
-                vm.queryResult = JSON.stringify(result, undefined, 4);
+                vm.queryResult = JSON.parse(response.data);
             }, function (response) {
-                vm.queryResult = response.data;
+                vm.queryResult = response;
             })['finally'](function () {
             vm.sendingQuery = false;
         });
@@ -51,11 +48,9 @@ function dashboardController($log, wikidataService) {
         vm.sendingQuery = true;
         wikidataService.sendWikidataQuery(type, field)
             .then(function (response) {
-                $log.debug("fetched " + JSON.stringify(response.data));
-                var result = "".concat(response.data);
-                vm.queryResult = JSON.stringify(result, undefined, 4);
+                vm.queryResult = JSON.parse(response.data);
             }, function (response) {
-                vm.queryResult = response.data;
+                vm.queryResult = response;
             })['finally'](function () {
             vm.sendingQuery = false;
         });

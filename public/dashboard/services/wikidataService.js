@@ -7,9 +7,14 @@ function wikidataService($http, $log, WIKIDATA_API_ROUTE) {
     var serviceName = "wikidataService";
 
     return {
-        get: function(query) {
-            $log.debug("in " + serviceName + " fetching article data for qid " + query);
-            return $http.get(url + "/q/" + query);
+        get: function(qItem) {
+            $log.debug("in " + serviceName + " fetching article data for qid: " + qItem);
+            return $http.get(url + "/q", {
+                params: {
+                    qItem: qItem,
+                    language: "en"
+                }
+            });
         },
         sendWikidataQuery: function(type, field) {
             $log.debug("in " + serviceName + " fetching wikidata page for qid -> type: " + type + ", field: "+ field);

@@ -5,14 +5,19 @@
 
 function config($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/main/dashboard');
+    $urlRouterProvider.otherwise('/main/entry/dashboard');
     $stateProvider
         .state('main', {
             url: '/main',
             'abstract': true,
             templateUrl: 'index.html'
         })
-        .state('main.dashboard', {
+        .state('main.entry', {
+            url: '/entry',
+            templateUrl: 'navigator.html',
+            controller: 'mainController as vm'
+        })
+        .state('main.entry.dashboard', {
             url: '/dashboard',
             templateUrl: 'dashboard/dashboard.html',
             controller: 'dashboardController as vm'
@@ -20,7 +25,7 @@ function config($stateProvider, $urlRouterProvider) {
 }
 
 angular
-    .module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'ngPrettyJson'])
+    .module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize'])
     .value("WIKIDATA_API_ROUTE", "http://localhost:3000/api/wikidata")
-    .value("VIAF_API_ROUTE", "/api/viaf")
+    .value("VIAF_API_ROUTE", "http://localhost:3000/api/viaf")
     .config(config);

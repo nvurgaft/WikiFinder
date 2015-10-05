@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <div class="container">
-
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Wikidata Finder</h3>
+            <h3 class="panel-title">Wikidata Dashboard</h3>
         </div>
         <div class="panel-body">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -17,6 +16,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <p>Type a Wikidata Q code subject in this text box and click Send.</p>
+
                                 <div class="input-group" style="margin-top: 1em;">
                                     <span class="input-group-addon">{{vm.queryPath + "Q"}}</span>
                                     <input type="text" class="form-control" ng-model="vm.qQuery" placeholder="Type Q values">
@@ -30,10 +30,13 @@
                                     </span>
                                 </div>
                                 <a ng-click="vm.qidQueryCollapse=!vm.qidQueryCollapse" style="cursor: pointer;">More info...</a>
+
                                 <div collapse="vm.qidQueryCollapse">
                                     <div class="well well-sm">
                                         <p><strong>Example:</strong> Q42</p>
-                                        <p>More examples and info: <a ng-href="https://wdq.wmflabs.org/api_documentation.html">https://wdq.wmflabs.org/api_documentation.html</a></p>
+
+                                        <p>More examples and info: <a ng-href="https://wdq.wmflabs.org/api_documentation.html">https://wdq.wmflabs.org/api_documentation.html</a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -48,6 +51,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <p>Type a Wikidata API query in this text box and click Send.</p>
+
                                 <div class="input-group" style="margin-top: 1em;">
                                     <div class="input-group-btn" dropdown dropdown-append-to-body>
                                         <button id="btn-append-to-body" type="button" class="btn btn-info dropdown-toggle" dropdown-toggle>
@@ -68,14 +72,25 @@
                                     </span>
                                 </div>
                                 <a ng-click="vm.wikidataQueryCollapse=!vm.wikidataQueryCollapse" style="cursor: pointer;">More info...</a>
+
                                 <div collapse="vm.wikidataQueryCollapse">
                                     <div class="well well-sm">
                                         <p><strong>Example:</strong> tree[4504][171,273,75,76,77,70,71,74,89]</p>
-                                        <p>More examples and info: <a ng-href="https://wdq.wmflabs.org/api_documentation.html">https://wdq.wmflabs.org/api_documentation.html</a></p>
+
+                                        <p>More examples and info: <a ng-href="https://wdq.wmflabs.org/api_documentation.html">https://wdq.wmflabs.org/api_documentation.html</a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </tab>
+                    <!-- save -->
+                    <tab>
+                        <tab-heading>
+                            <i class="fa fa-save"></i> Save
+                        </tab-heading>
+
+                        <p>save on db</p>
                     </tab>
                 </tabset>
             </div>
@@ -84,16 +99,41 @@
                 <tabset>
                     <tab>
                         <tab-heading>
-                            <i class=""></i> Response
+                            <i class=""></i> Raw Response
                         </tab-heading>
                         <button class="btn btn-default" ng-click="vm.queryResult=''">Clean</button>
-                        <pre>{{vm.queryResult}}</pre>
+                        <pre>{{vm.queryResult | json}}</pre>
                     </tab>
                     <tab>
                         <tab-heading>
-                            <i class=""></i> Data
+                            <i class=""></i> Catagoried Data
                         </tab-heading>
-                        <p>Show properties of the response</p>
+
+                        <div ng-if="vm.queryResult.entities">
+                            <accordion>
+                                <accordion-group ng-repeat="(key, value) in vm.queryResult.entities">
+                                    <accordion-heading>
+                                        {{key}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                    </accordion-heading>
+                                    <!--<pre ng-repeat="(key, value) in value">{{key}}: {{value | json}}</pre>-->
+
+                                    <accordion>
+                                        <accordion-group ng-repeat="(_key, _value) in value">
+                                            <accordion-heading>
+                                                {{_key}} <i class="pull-right glyphicon"
+                                                            ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                            </accordion-heading>
+
+                                            <pre>{{_value | json}}</pre>
+                                        </accordion-group>
+                                    </accordion>
+
+                                </accordion-group>
+                            </accordion>
+                        </div>
+                        <div ng-if="!vm.queryResult.entities">
+                            <h4>Nothing to show</h4>
+                        </div>
                     </tab>
                     <tab>
                         <tab-heading>
@@ -105,5 +145,4 @@
             </div>
         </div>
     </div>
-
 </div>
