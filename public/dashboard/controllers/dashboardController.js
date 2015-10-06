@@ -14,11 +14,6 @@ function dashboardController($log, wikidataService) {
     vm.wikidataQueryCollapse = true;
     vm.qidQueryCollapse = true;
 
-    vm.queryFormats = [
-        {name: "json", value: 1},
-        {name: "plain-text", value: 2}
-    ];
-
     vm.queryTypes = [
         {name: "claim", value: 1},
         {name: "noclaim", value: 2},
@@ -41,7 +36,7 @@ function dashboardController($log, wikidataService) {
         vm.sendingQuery = true;
         wikidataService.get(query)
             .then(function (response) {
-                vm.queryResult = JSON.parse(response.data);
+                vm.queryResult = (JSON.parse(response)).entities['Q'+query];
             }, function (response) {
                 vm.queryResult = response;
             })['finally'](function () {
@@ -53,7 +48,7 @@ function dashboardController($log, wikidataService) {
         vm.sendingQuery = true;
         wikidataService.sendWikidataQuery(type, field)
             .then(function (response) {
-                vm.queryResult = JSON.parse(response.data);
+                vm.queryResult = JSON.parse(response);
             }, function (response) {
                 vm.queryResult = response;
             })['finally'](function () {

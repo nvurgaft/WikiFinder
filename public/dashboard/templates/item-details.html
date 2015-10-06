@@ -1,0 +1,55 @@
+<div ng-if="vm.queryResult">
+    <h3>Result: {{vm.queryResult.title}}
+        <small> id: {{vm.queryResult.pageid}}, type: {{vm.queryResult.type}}, modified: {{vm.queryResult.modified}}</small>
+    </h3>
+</div>
+
+<div ng-if="vm.queryResult.labels">
+    <label>Lables</label>
+    <ul class="list-group" style="max-height: 16em; overflow-y: auto;">
+        <li class="list-group-item" ng-repeat="label in vm.queryResult.labels">{{label.language}}, {{label.value}}</li>
+    </ul>
+</div>
+
+<div ng-if="vm.queryResult.descriptions">
+    <label>Description</label>
+    <ul class="list-group" style="max-height: 16em; overflow-y: auto;">
+        <li class="list-group-item" ng-repeat="desc in vm.queryResult.descriptions">{{desc.language}}, {{desc.value}}</li>
+    </ul>
+</div>
+
+<div ng-if="vm.queryResult">
+    <a ng-init="vm.isCollapsed=true" ng-click="vm.isCollapsed = !vm.isCollapsed" style="cursor: pointer;">
+        <span>Show {{vm.isCollapsed ? "More" : "Less"}}</span>
+    </a>
+</div>
+<div collapse="vm.isCollapsed">
+    <div>
+        <div ng-if="vm.queryResult.aliases">
+            <label>Aliases</label>
+            <ul class="list-group" style="max-height: 16em; overflow-y: auto;">
+                <li class="list-group-item" ng-repeat="alias in vm.queryResult.aliases">{{alias}}</li>
+            </ul>
+        </div>
+
+        <div ng-if="vm.queryResult.claims">
+            <label>Claims</label>
+            <ul class="list-group" style="max-height: 24em; overflow-y: auto;">
+                <li class="list-group-item" ng-repeat="(key, value) in vm.queryResult.claims">{{key}}
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="c in value">
+                            {{c}}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div ng-if="vm.queryResult.sitelinks">
+            <label>Site Links</label>
+            <ul class="list-group" style="max-height: 16em; overflow-y: auto;">
+                <li class="list-group-item" ng-repeat="site in vm.queryResult.sitelinks">{{site.site}}, {{site.title}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
