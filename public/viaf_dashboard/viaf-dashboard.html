@@ -2,7 +2,7 @@
 <div class="container">
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title">Wikidata Dashboard</h3>
+            <h3 class="panel-title">VIAF Dashboard</h3>
         </div>
         <div class="panel-body">
 
@@ -11,15 +11,15 @@
                     <!-- plain qid -->
                     <tab>
                         <tab-heading>
-                            <i class="fa fa-search"></i> Send QID
+                            <i class="fa fa-search"></i> Send VID
                         </tab-heading>
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <p>Type a Wikidata Q code subject in this text box and click Send.</p>
+                                <p>Type a VIAF ID code subject in this text box and click Send.</p>
 
                                 <div class="input-group" style="margin-top: 1em;">
-                                    <span class="input-group-addon">Q</span>
-                                    <input type="text" class="form-control" ng-model="vm.qQuery" placeholder="Type Q values">
+                                    <span class="input-group-addon">VID</span>
+                                    <input type="text" class="form-control" ng-model="vm.qQuery" placeholder="Type VIAF ID">
                                     <span class="input-group-btn">
                                         <button class="btn btn-primary" ng-click="vm.sendQIDRequest(vm.qQuery)"
                                                 ng-disabled="vm.qQuery.length===0">Send
@@ -34,9 +34,9 @@
 
                                 <div collapse="vm.qidQueryCollapse">
                                     <div class="well well-sm">
-                                        <p><strong>Example:</strong> Q42, should bring an article about: <em>Douglas Adams</em></p>
+                                        <p><strong>Example:</strong> 102333412, should bring an article about: <i>Austen, Jane, 1775-1817</i></p>
 
-                                        <p>More examples and info: <a ng-href="https://wdq.wmflabs.org/api_documentation.html">https://wdq.wmflabs.org/api_documentation.html</a>
+                                        <p>More examples and info: <a ng-href="https://platform.worldcat.org/api-explorer/VIAF">https://platform.worldcat.org/api-explorer/VIAF</a>
                                         </p>
                                     </div>
                                 </div>
@@ -44,47 +44,6 @@
                         </div>
                     </tab>
 
-                    <!-- wikidata query -->
-                    <tab>
-                        <tab-heading>
-                            <i class="fa fa-search"></i> Send Wikidata Query
-                        </tab-heading>
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <p>Type a Wikidata API query in this text box and click Send.</p>
-
-                                <div class="input-group" style="margin-top: 1em;">
-                                    <div class="input-group-btn" dropdown dropdown-append-to-body>
-                                        <button id="btn-append-to-body" type="button" class="btn btn-info dropdown-toggle" dropdown-toggle>
-                                            {{vm.selectedType ? vm.selectedType.name : "Select Query Type"}} <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu" aria-labelledby="btn-append-to-body">
-                                            <li role="menuitem" ng-repeat="item in vm.queryTypes" ng-click="vm.selectedType = item"><a ng-href="#">{{item.name}}</a></li>
-                                        </ul>
-                                    </div>
-                                    <input type="text" class="form-control" ng-model="vm.wikidataQuery" placeholder="Type query here..">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary" ng-click="vm.sendWikidataRequest(vm.selectedType.name, vm.wikidataQuery)"
-                                                ng-disabled="vm.wikidataQuery.length===0">Send
-                                        </button>
-                                        <button class="btn btn-warning" ng-click="vm.wikidataQuery = ''">
-                                            <span class="fa fa-trash"></span>
-                                        </button>
-                                    </span>
-                                </div>
-                                <a ng-click="vm.wikidataQueryCollapse=!vm.wikidataQueryCollapse" style="cursor: pointer;">More info...</a>
-
-                                <div collapse="vm.wikidataQueryCollapse">
-                                    <div class="well well-sm">
-                                        <p><strong>Example:</strong> tree[4504][171,273,75,76,77,70,71,74,89]</p>
-
-                                        <p>More examples and info: <a ng-href="https://wdq.wmflabs.org/api_documentation.html">https://wdq.wmflabs.org/api_documentation.html</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </tab>
                     <!-- save -->
                     <tab>
                         <tab-heading>

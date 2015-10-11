@@ -22,6 +22,11 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: 'dashboard/dashboard.html',
             controller: 'dashboardController as vm'
         })
+        .state('main.entry.viaf-dashboard', {
+            url: '/viaf-dashboard',
+            templateUrl: 'viaf_dashboard/viaf-dashboard.html',
+            controller: 'viafDashboardController as vm'
+        })
         .state('main.entry.database', {
             url: '/database',
             templateUrl: 'database/database.html',
@@ -35,7 +40,7 @@ function config($stateProvider, $urlRouterProvider) {
 }
 
 angular
-    .module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'angular-json-tree'])
+    .module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'angular-json-tree', 'ngAnimate'])
     .value("WIKIDATA_API_ROUTE", "http://localhost:3000/api/wikidata")
     .value("VIAF_API_ROUTE", "http://localhost:3000/api/viaf")
     .config(config);

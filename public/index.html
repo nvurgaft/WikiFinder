@@ -6,10 +6,13 @@
 </head>
 <body>
 
+    <!-- default viewport -->
     <div ui-view></div>
 
+    <!-- angular -->
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
@@ -34,6 +37,8 @@
     <script src="dashboard/services/dashboardService.js"></script>
     <script src="dashboard/services/wikidataService.js"></script>
     <script src="dashboard/services/viafService.js"></script>
+
+    <script src="viaf_dashboard/controllers/viafDashboardController.js"></script>
 
     <!-- database -->
     <script src="database/controllers/databaseController.js"></script>
