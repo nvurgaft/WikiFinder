@@ -7,8 +7,6 @@ function dashboardController($log, wikidataService) {
     vm.wikidataQuery = "";
     vm.qQuery = "";
 
-    vm.wikidataQueryResult = "";
-    vm.qQueryResult = "";
     vm.sendingQuery = false;
 
     vm.wikidataQueryCollapse = true;
@@ -36,12 +34,13 @@ function dashboardController($log, wikidataService) {
         vm.sendingQuery = true;
         wikidataService.get(query)
             .then(function (response) {
-                vm.queryResult = (JSON.parse(response)).entities['Q'+query];
+                vm.queryResult = (JSON.parse(response)).entities['Q' + query];
             }, function (response) {
                 vm.queryResult = response;
-            })['finally'](function () {
-            vm.sendingQuery = false;
-        });
+            })
+            .finally(function () {
+                vm.sendingQuery = false;
+            });
     };
 
     vm.sendWikidataRequest = function (type, field) {
@@ -51,9 +50,10 @@ function dashboardController($log, wikidataService) {
                 vm.queryResult = JSON.parse(response);
             }, function (response) {
                 vm.queryResult = response;
-            })['finally'](function () {
-            vm.sendingQuery = false;
-        });
+            })
+            .finally(function () {
+                vm.sendingQuery = false;
+            });
     }
 }
 

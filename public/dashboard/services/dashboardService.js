@@ -8,7 +8,7 @@ function dashboardService($http, $log, WIKIDATA_API_ROUTE) {
 
     return {
         sendWikidataRawQuery: function(query) {
-            $log.debug("dashboardService > sendWikidataRawQuery");
+            $log.debug(serviceName + " > sendWikidataRawQuery");
             return $http.get(url + query);
         }
     };

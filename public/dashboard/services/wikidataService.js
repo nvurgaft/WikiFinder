@@ -20,9 +20,10 @@ function wikidataService($http, $log, WIKIDATA_API_ROUTE, $q) {
                     deferred.resolve(response.data);
                 }, function (response) {
                     deferred.reject(response.status + " : " + response.data);
-                })['catch'](function (err) {
-                deferred.reject(err);
-            });
+                })
+                .catch(function (err) {
+                    deferred.reject(err);
+                });
             return deferred.promise;
         },
         sendWikidataQuery: function (type, field) {
@@ -38,9 +39,10 @@ function wikidataService($http, $log, WIKIDATA_API_ROUTE, $q) {
                     deferred.resolve(response.data);
                 }, function (response) {
                     deferred.reject(response.status + " : " + response.data);
-                })['catch'](function (err) {
-                deferred.reject(err);
-            });
+                })
+                .catch(function (err) {
+                    deferred.reject(err);
+                });
             return deferred.promise;
         }
     }

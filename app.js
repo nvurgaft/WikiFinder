@@ -34,6 +34,7 @@ router.use(function(req, res, next) {
 });
 
 require('./routes/wikidata')(router);
+require('./routes/viaf')(router);
 
 router.get('/', function(req, res) {
     res.sendFile()

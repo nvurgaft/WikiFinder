@@ -10,6 +10,7 @@ module.exports = function(router) {
         request.get(url, function(error, response, body) {
             if (error) {
                 res.send(error);
+                return;
             }
             res.send(body);
         });

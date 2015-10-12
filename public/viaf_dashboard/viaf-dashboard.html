@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <div class="container">
-    <div class="panel panel-info">
+    <div class="panel panel-success">
         <div class="panel-heading">
             <h3 class="panel-title">VIAF Dashboard</h3>
         </div>
@@ -19,13 +19,21 @@
 
                                 <div class="input-group" style="margin-top: 1em;">
                                     <span class="input-group-addon">VID</span>
-                                    <input type="text" class="form-control" ng-model="vm.qQuery" placeholder="Type VIAF ID">
+                                    <input type="text" class="form-control" ng-model="vm.viafQuery" placeholder="Type VIAF ID">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-primary" ng-click="vm.sendQIDRequest(vm.qQuery)"
-                                                ng-disabled="vm.qQuery.length===0">Send
+                                        <button class="btn btn-primary" ng-click="vm.sendViafRequest(vm.viafQuery, vm.selectedFormat)"
+                                                ng-disabled="vm.viafQuery.length===0">Send
                                         </button>
-
-                                        <button class="btn btn-warning" ng-click="vm.qQuery = ''">
+                                        <!-- Single button using append-to-body -->
+                                        <div class="btn-group" dropdown dropdown-append-to-body>
+                                            <button id="btn-append-to-body" type="button" class="btn btn-info" dropdown-toggle>
+                                                {{vm.selectedFormat.name}} <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="btn-append-to-body">
+                                                <li role="menuitem" ng-repeat="format in vm.formatList" ng-click="vm.selectedFormat = format"><a href="#">{{format.name}}</a></li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-warning" ng-click="vm.viafQuery = ''">
                                             <span class="fa fa-trash"></span>
                                         </button>
                                     </span>
@@ -96,7 +104,7 @@
                             <span class="fa fa-spin fa-refresh fa-2x"></span>
                         </div>
                         <div ng-hide="vm.sendingQuery">
-                            <div ng-include="'dashboard/templates/item-details.html'"></div>
+                            <div ng-include="'viaf_dashboard/templates/article-details.html'"></div>
                         </div>
                     </tab>
                 </tabset>
