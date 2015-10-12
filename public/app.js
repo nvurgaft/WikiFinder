@@ -27,6 +27,11 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: 'viaf_dashboard/viaf-dashboard.html',
             controller: 'viafDashboardController as vm'
         })
+        .state('main.entry.linker', {
+            url: '/linker',
+            templateUrl: 'linker/linker.html',
+            controller: 'linkerController as vm'
+        })
         .state('main.entry.database', {
             url: '/database',
             templateUrl: 'database/database.html',
