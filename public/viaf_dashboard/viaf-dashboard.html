@@ -69,7 +69,14 @@
                         <tab-heading>
                             <i class=""></i> Raw Response
                         </tab-heading>
-                        <button class="btn btn-default" ng-click="vm.queryResult=''">Clean</button>
+
+                        <div class="center-block">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <button class="btn btn-default" ng-click="vm.queryResult=''">Clean</button>
+                                </div>
+                            </form>
+                        </div>
 
                         <div class="center-block" ng-show="vm.sendingQuery">
                             <span class="fa fa-spin fa-refresh fa-2x"></span>

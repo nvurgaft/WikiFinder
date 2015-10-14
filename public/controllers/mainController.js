@@ -5,7 +5,7 @@ function mainController($log) {
     var vm = this;
 
     $log.debug('started mainController');
-
+    vm.collapsed = true;
 }
 
 angular.module('app').controller('mainController', mainController);

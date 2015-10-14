@@ -5,6 +5,7 @@ function linkerController($log, wikidataService, viafService) {
 
     var vm = this;
 
+    vm.personLookupName = "";
     vm.wikidataQueryResult = "";
     vm.viafQueryResult = "";
 
@@ -13,24 +14,29 @@ function linkerController($log, wikidataService, viafService) {
 
     vm.clearWikidataRequest = function () {
         vm.wikidataRequest = "";
-    }
+    };
 
     vm.clearViafRequest = function () {
         vm.viafRequest = "";
-    }
+    };
 
-    vm.processWikidataRequest = function (query) {
+    vm.searchName = function(name) {
+
+        vm.processWikidataRequest(name);
+    };
+
+    vm.processWikidataRequest = function (name) {
         vm.processingWikidataSegment = true;
-        wikidataService.get(query)
+        wikidataService.getEntitiesByName(name, "en", "json")
             .then(function (response) {
-                vm.wikidataQueryResult = JSON.parse(response);
+                vm.wikidataQueryResult = JSON.parse(response.data);
             }, function (response) {
                 vm.wikidataQueryResult = response;
             })
             .finally(function () {
                 vm.processingWikidataSegment = false;
             });
-    }
+    };
 
     vm.processViafRequest = function (query) {
         vm.processingViafSegment = true;
@@ -43,7 +49,7 @@ function linkerController($log, wikidataService, viafService) {
             .finally(function () {
                 vm.processingViafSegment = false;
             });
-    }
+    };
 }
 
 angular.module('app').controller('linkerController', linkerController);

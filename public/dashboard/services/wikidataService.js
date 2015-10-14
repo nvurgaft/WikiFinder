@@ -44,6 +44,26 @@ function wikidataService($http, $log, WIKIDATA_API_ROUTE, $q) {
                     deferred.reject(err);
                 });
             return deferred.promise;
+        },
+        getEntitiesByName: function(search, language, format) {
+            $log.debug("in " + serviceName + " fetching wikidata entity names");
+            return $http.get(url + '/wbSearchEntities', {
+                params: {
+                    search: search,
+                    language: language,
+                    format: format
+                }
+            });
+        },
+        getEntitiesByQid: function(itemsList, language, format) {
+            $log.debug("in " + serviceName + " fetching wikidata entity ids");
+            return $http.get(url + '/wbGetEntities', {
+                params: {
+                    search: search,
+                    language: language,
+                    format: format
+                }
+            });
         }
     }
 }
