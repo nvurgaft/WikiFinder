@@ -3,6 +3,7 @@
  */
 var request = require('request');
 var _ = require('underscore');
+var Q = require('q');
 
 module.exports = function (router) {
 
@@ -68,10 +69,18 @@ module.exports = function (router) {
     router.get(router_point + '/wbSearchEntities', function (req, res) {
         var search = req.query.search,
             language = req.query.language,
-            format = req.query.format;
+            format = req.query.format,
+            type = req.query.type;
 
-        var url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=" + search + "&language=" + language + "&format=" + format;
-        request.get(url, function(error, response, body) {
+        url = [
+            "https://www.wikidata.org/w/api.php?action=wbsearchentities",
+            search ? "&search=" + search : "",
+            language ? "&language=" + language : "",
+            format ? "&format=" + format : "",
+            type ? "&type=" + type : ""
+        ].join("");
+
+        request.get(url, function (error, response, body) {
             if (error) {
                 res.json(error);
                 return;
@@ -89,7 +98,7 @@ module.exports = function (router) {
             language = req.query.language,
             format = req.query.format;
 
-        _.each(qItems, function(item) {
+        _.each(qItems, function (item) {
             if (_.isNaN(item)) {
                 res.send({"error": "QID " + item + " is not a number"});
                 return;
@@ -97,14 +106,101 @@ module.exports = function (router) {
         });
 
         var formattedItems = qItems.join('|');
-        var url = ["https://www.wikidata.org/w/api.php?action=wbgetentities&ids=", formattedItems, "&languages=", language, "&format=", format]
-        request.get(url, function(error, response, body) {
+        var url = [
+            "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
+            formattedItems,
+            "&languages=", language,
+            "&format=", format
+        ].join("");
+
+        request.get(url, function (error, response, body) {
             if (error) {
                 res.json(error);
                 return;
             }
             res.json(body)
         });
+    });
+
+    /**
+     * Get a claim P for entity Q
+     */
+    router.get(router_point + '/wbgetclaims', function (res, req) {
+
+        var entity = req.params.entity,
+            claim = req.params.claim,
+            language = req.params.language;
+
+        if (!entity || entity.length === 0) {
+            res.json({message: "entity does not exist in request"});
+            return;
+        }
+
+        var url = [
+            "https://www.wikidata.org/w/api.php?action=wbgetclaims",
+            "&entity=" + entity,
+            claim ? "&property=" + claim : "",
+            language ? "&language=" + language : ""
+        ].join("");
+
+        request.get(url, function (error, response, body) {
+            if (error) {
+                res.json(error);
+                return;
+            }
+            res.json(body)
+        })
+    });
+
+    /**
+     * Combine query calls to provide viaf id by name search
+     */
+    router.get(router_point + "/getviaf", function (req, res) {
+
+        var search = req.query.search,      // full author name
+            language = req.query.language,  // response data language
+            format = req.query.format;      // format (json is nice)
+
+        url = [
+            "https://www.wikidata.org/w/api.php?action=wbsearchentities",
+            search ? "&search=" + search : "",
+            language ? "&language=" + language : "",
+            format ? "&format=" + format : ""
+        ].join("");
+
+        var deferred = Q.defer();
+        request.get(url, function (error, response, body) {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                deferred.resolve(body);
+            }
+        });
+
+        deferred.promise.then(function (response) {
+
+            var ids = _.pluck(response.data.search, 'id').join('|');
+            var url = [
+                "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
+                ids,
+                "&languages=", "en",
+                "&format=", "json"
+            ].join("");
+
+            request.get(url, function (error, response, body) {
+                if (error) {
+                    res.json(error);
+                    return;
+                }
+                var viaf = body;
+
+                res.json(viaf);
+
+            })
+        }, function (response) {
+            res.json(response.error);
+        });
+
     });
 
     router.get(router_point + '/test', function (req, res) {

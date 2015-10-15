@@ -43,24 +43,27 @@
                     <pre>{{vm.wikidataQueryResult | json}}</pre>
                 </div>
                 <div class="panel-footer">
-                    <span class="label label-success">ID: </span>
+                    <div ng-repeat="article in vm.wikidataQueryResult.search">
+                        <span class="label label-primary">id: {{article.id}}</span>&nbsp;
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">VIAF Panel <span class="fa fa-spinner fa-spin fa-pulse" ng-show="vm.processingViafSegment"></span></h3>
-                </div>
-                <div class="panel-body">
-                    <pre>TBA</pre>
-                </div>
-                <div class="panel-footer">
-                    <span class="label label-success">ID: </span>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">VIAF Panel <span class="fa fa-spinner fa-spin fa-pulse" ng-show="vm.processingViafSegment"></span></h3>
+                    </div>
+                    <div class="panel-body">
+                        <pre>TBA</pre>
+                    </div>
+                    <div class="panel-footer">
+                        <span class="label label-success">ID: </span>
+                    </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>

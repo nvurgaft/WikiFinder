@@ -38,6 +38,21 @@ function linkerController($log, wikidataService, viafService) {
             });
     };
 
+    // Send QID
+    vm.getQIDProperties = function (query) {
+        vm.sendingQuery = true;
+        wikidataService.get(query)
+            .then(function (response) {
+                var data = (JSON.parse(response)).entities['Q' + query];
+                vm.wikidataItemPropertiesList = data.claims;
+            }, function (response) {
+                vm.wikidataItemPropertiesList = response;
+            })
+            .finally(function () {
+                vm.sendingQuery = false;
+            });
+    };
+
     vm.processViafRequest = function (query) {
         vm.processingViafSegment = true;
         viafService.get(query, 'json')

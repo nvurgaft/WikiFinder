@@ -55,9 +55,19 @@ function wikidataService($http, $log, WIKIDATA_API_ROUTE, $q) {
                 }
             });
         },
-        getEntitiesByQid: function(itemsList, language, format) {
+        getEntitiesByQid: function(item, property, language) {
             $log.debug("in " + serviceName + " fetching wikidata entity ids");
-            return $http.get(url + '/wbGetEntities', {
+            return $http.get(url + '/wbgetclaims', {
+                params: {
+                    entity: item,
+                    claim: property,
+                    language: language
+                }
+            });
+        },
+        getViafByName: function(search, language, format) {
+            $log.debug("in " + serviceName + " fetching wikidata entity ids");
+            return $http.get(url + '/getviaf', {
                 params: {
                     search: search,
                     language: language,
@@ -65,7 +75,7 @@ function wikidataService($http, $log, WIKIDATA_API_ROUTE, $q) {
                 }
             });
         }
-    }
+    };
 }
 
 angular.module('app').factory('wikidataService', wikidataService);

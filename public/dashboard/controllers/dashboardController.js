@@ -30,6 +30,7 @@ function dashboardController($log, wikidataService) {
         vm.wikidataQuery = "";
     };
 
+    // Send QID
     vm.sendQIDRequest = function (query) {
         vm.sendingQuery = true;
         wikidataService.get(query)
@@ -43,6 +44,7 @@ function dashboardController($log, wikidataService) {
             });
     };
 
+    // Send Wikidata query
     vm.sendWikidataRequest = function (type, field) {
         vm.sendingQuery = true;
         wikidataService.sendWikidataQuery(type, field)
