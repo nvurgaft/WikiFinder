@@ -5,7 +5,7 @@
 
 function config($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/main/entry/dashboard');
+    $urlRouterProvider.otherwise('/main/entry/linker');
     $stateProvider
         .state('main', {
             url: '/main',
@@ -18,7 +18,7 @@ function config($stateProvider, $urlRouterProvider) {
             controller: 'mainController as vm'
         })
         .state('main.entry.dashboard', {
-            url: '/dashboard',
+            url: '/wikidata-dashboard',
             templateUrl: 'dashboard/dashboard.html',
             controller: 'dashboardController as vm'
         })

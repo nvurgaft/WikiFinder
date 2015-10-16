@@ -15,8 +15,14 @@ function viafDashboardController($log, viafService) {
     vm.qidQueryCollapse = true;
 
     vm.formatList = [
-        {name: "html", value: 1},
-        {name: "json", value: 2}
+        {
+            name: "html",
+            value: 1
+        },
+        {
+            name: "json",
+            value: 2
+        }
     ];
 
     vm.selectedFormat = vm.formatList[1];
@@ -25,9 +31,11 @@ function viafDashboardController($log, viafService) {
         vm.wikidataQuery = "";
     };
 
+    vm.queryId = 0;
     vm.sendViafRequest = function (vid, format) {
         $log.debug("vid: " + vid + ", format: " + format.name);
         vm.sendingQuery = true;
+        vm.queryId = vid;
         viafService.get(vid, format.name)
             .then(function (response) {
                 if (vm.selectedFormat.name==='json') {

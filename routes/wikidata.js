@@ -183,15 +183,14 @@ module.exports = function (router) {
 
         firstPromise(url)
             .then(function (response) {
-
-                var obj = JSON.parse(response);
-                var ids = _.pluck(obj.search, 'id');
-                var url = [
-                    "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
-                    ids.join('|'),
-                    "&languages=", "en",
-                    "&format=", "json"
-                ].join("");
+                var obj = JSON.parse(response),
+                    ids = _.pluck(obj.search, 'id'),
+                    url = [
+                        "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
+                        ids.join('|'),
+                        "&languages=", "en",
+                        "&format=", "json"
+                    ].join("");
 
                 request.get(url, function (error, response, body) {
                     if (error) {
@@ -211,10 +210,5 @@ module.exports = function (router) {
             }, function (response) {
                 res.json(response.error);
             });
-
-    });
-
-    router.get(router_point + '/test', function (req, res) {
-        res.json({"message": "this is a test"});
     });
 };

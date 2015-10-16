@@ -1,7 +1,13 @@
 <div class="container">
 
-    <h3>linker </h3>
+    <h3>Linker </h3>
     <hr/>
+    <p>
+        Search for an author or a poet's name, and get his VIAF data.
+        The query will go through the Wikidata/Wikimedia database and return a viaf identifier (if exists).
+        Then, using the identifier, look up the VIAF API for additional information about the queried
+        individual.
+    </p>
 
     <div class="row">
 
@@ -42,7 +48,7 @@
                     <pre>viaf identifier: {{vm.testResponse | json}}</pre>
                 </div>
                 <div class="panel-footer">
-                    <button class="btn btn-success" ng-show="vm.testResponse" ng-click="vm.processViafRequest(vm.testResponse)">get viaf records</button>
+                    <button class="btn btn-success" ng-show="vm.testResponse" ng-click="vm.processViafRequest(vm.testResponse)">Re-send VIAF Indetifier</button>
                 </div>
             </div>
         </div>
@@ -50,17 +56,15 @@
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="panel panel-default">
 
-                    <div class="panel-heading">
-                        <h3 class="panel-title">VIAF Panel <span class="fa fa-spinner fa-spin fa-pulse" ng-show="vm.processingViafSegment"></span></h3>
-                    </div>
-                    <div class="panel-body">
-                        <ul class="list-group">
-                            <li ng-repeat="item in vm.viafQueryResult" class="list-group-item">{{item}}</li>
-                        </ul>
-                    </div>
-                    <div class="panel-footer">
+                <div class="panel-heading">
+                    <h3 class="panel-title">VIAF Panel <span class="fa fa-spinner fa-spin fa-pulse" ng-show="vm.processingViafSegment"></span></h3>
+                </div>
+                <div class="panel-body">
+                    <pre>{{vm.viafQueryResult | json}}</pre>
+                </div>
+                <div class="panel-footer">
 
-                    </div>
+                </div>
             </div>
         </div>
 

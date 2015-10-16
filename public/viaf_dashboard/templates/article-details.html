@@ -1,3 +1,16 @@
-<h4> placeholder </h4>
+<div>
+    <h3>Result: {{vm.queryId}}</h3>
 
-<p>article-details.html</p>
+    <label>Lables</label>
+    <ul class="list-group" style="max-height: 16em; overflow-y: auto;">
+        <li class="list-group-item" ng-repeat="item in vm.queryResult">{{item}}</li>
+    </ul>
+
+    <a ng-init="vm.isCollapsed=true" ng-click="vm.isCollapsed = !vm.isCollapsed" style="cursor: pointer;">
+        <span>Show {{vm.isCollapsed ? "More" : "Less"}}</span>
+    </a>
+
+    <div collapse="vm.isCollapsed">
+        <!-- add here -->
+    </div>
+</div>

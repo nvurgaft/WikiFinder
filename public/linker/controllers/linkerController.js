@@ -1,7 +1,7 @@
 /**
  * Created by Koby on 12-Oct-15.
  */
-function linkerController($log, wikidataService, viafService) {
+function linkerController($log, wikidataService, viafService, PreferencesService) {
 
     var vm = this;
 
@@ -21,7 +21,6 @@ function linkerController($log, wikidataService, viafService) {
     };
 
     vm.searchName = function(name) {
-
         vm.processWikidataRequest(name);
     };
 
@@ -69,12 +68,17 @@ function linkerController($log, wikidataService, viafService) {
 
     vm.testResponse = "";
     vm.getViafByFullName = function(query) {
+        vm.processingWikidataSegment = true;
         wikidataService.getViafByName(query, "en", "json")
             .then(function(response) {
                 vm.testResponse = JSON.parse(response.data);
+                vm.processViafRequest(vm.testResponse);
             }, function(response) {
                 vm.testResponse = JSON.parse(response.status + " : " + response.data);
-            });
+            })
+            .finally(function() {
+                vm.processingWikidataSegment = false;
+            })
     }
 }
 
