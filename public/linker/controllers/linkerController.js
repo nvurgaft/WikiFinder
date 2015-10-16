@@ -53,6 +53,7 @@ function linkerController($log, wikidataService, viafService) {
             });
     };
 
+    // send vid to viaf API for response
     vm.processViafRequest = function (query) {
         vm.processingViafSegment = true;
         viafService.get(query, 'json')
@@ -65,6 +66,16 @@ function linkerController($log, wikidataService, viafService) {
                 vm.processingViafSegment = false;
             });
     };
+
+    vm.testResponse = "";
+    vm.getViafByFullName = function(query) {
+        wikidataService.getViafByName(query, "en", "json")
+            .then(function(response) {
+                vm.testResponse = JSON.parse(response.data);
+            }, function(response) {
+                vm.testResponse = JSON.parse(response.status + " : " + response.data);
+            });
+    }
 }
 
 angular.module('app').controller('linkerController', linkerController);

@@ -13,7 +13,7 @@
                         <input type="text" ng-model="vm.personLookupName" class="form-control input-lg" placeholder="Enter an Author or a Poet name">
                         <span class="input-group-btn">
                             <button class="btn btn-primary btn-lg"
-                                    ng-click="vm.searchName(vm.personLookupName)"
+                                    ng-click="vm.getViafByFullName(vm.personLookupName)"
                                     ng-disabled="vm.personLookupName.length===0"
                                     type="button">
                                 Search!
@@ -31,10 +31,40 @@
                     <em><a href ng-click="vm.personLookupName='Naomi Shemer'">Naomi Shemer</a></em>
                 </div>
             </form>
-
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Wikidata Panel <span class="fa fa-spinner fa-spin fa-pulse" ng-show="vm.processingWikidataSegment"></span></h3>
+                </div>
+                <div class="panel-body">
+                    <pre>viaf identifier: {{vm.testResponse | json}}</pre>
+                </div>
+                <div class="panel-footer">
+                    <button class="btn btn-success" ng-show="vm.testResponse" ng-click="vm.processViafRequest(vm.testResponse)">get viaf records</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title">VIAF Panel <span class="fa fa-spinner fa-spin fa-pulse" ng-show="vm.processingViafSegment"></span></h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li ng-repeat="item in vm.viafQueryResult" class="list-group-item">{{item}}</li>
+                        </ul>
+                    </div>
+                    <div class="panel-footer">
+
+                    </div>
+            </div>
+        </div>
+
+        <!--<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Wikidata Panel <span class="fa fa-spinner fa-spin fa-pulse" ng-show="vm.processingWikidataSegment"></span></h3>
@@ -64,6 +94,5 @@
                     </div>
                 </div>
             </div>
-
-        </div>
+        </div>-->
     </div>

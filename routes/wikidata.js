@@ -168,38 +168,49 @@ module.exports = function (router) {
             format ? "&format=" + format : ""
         ].join("");
 
-        var deferred = Q.defer();
-        request.get(url, function (error, response, body) {
-            if (error) {
-                deferred.reject(error);
-            } else {
-                deferred.resolve(body);
-            }
-        });
 
-        deferred.promise.then(function (response) {
-
-            var ids = _.pluck(response.data.search, 'id').join('|');
-            var url = [
-                "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
-                ids,
-                "&languages=", "en",
-                "&format=", "json"
-            ].join("");
-
-            request.get(url, function (error, response, body) {
+        function firstPromise(argUrl) {
+            var deferred = Q.defer();
+            request.get(argUrl, function (error, response, body) {
                 if (error) {
-                    res.json(error);
-                    return;
+                    deferred.reject(error);
+                } else {
+                    deferred.resolve(body);
                 }
-                var viaf = body;
+            });
+            return deferred.promise;
+        };
 
-                res.json(viaf);
+        firstPromise(url)
+            .then(function (response) {
 
-            })
-        }, function (response) {
-            res.json(response.error);
-        });
+                var obj = JSON.parse(response);
+                var ids = _.pluck(obj.search, 'id');
+                var url = [
+                    "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
+                    ids.join('|'),
+                    "&languages=", "en",
+                    "&format=", "json"
+                ].join("");
+
+                request.get(url, function (error, response, body) {
+                    if (error) {
+                        res.json(error);
+                        return;
+                    } else {
+                        var viafids = [];
+                        var obj = JSON.parse(body).entities;
+                        for (var entity in obj) {
+                            if (obj[entity].claims.P214) {
+                                viafids.push(obj[entity].claims.P214[0].mainsnak.datavalue.value);
+                            }
+                        }
+                        res.json(viafids);
+                    }
+                });
+            }, function (response) {
+                res.json(response.error);
+            });
 
     });
 
