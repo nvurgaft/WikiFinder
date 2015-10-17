@@ -6,7 +6,7 @@
     "start": "node ./bin/www"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
