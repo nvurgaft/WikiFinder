@@ -57,7 +57,13 @@ function linkerController($log, wikidataService, viafService, PreferencesService
         vm.processingViafSegment = true;
         viafService.get(query, 'json')
             .then(function (response) {
-                vm.viafQueryResult = JSON.parse(response.data);
+                var res = _.isString(response.data);
+                $log.debug(res + " : " + response.data);
+                if (res) {
+                    vm.viafQueryResult = JSON.parse(response.data);
+                } else {
+                    vm.viafQueryResult = response.data;
+                }
             }, function (response) {
                 vm.viafQueryResult = response.status + " : " + response.data;
             })
