@@ -9,30 +9,31 @@ module.exports = function (router) {
     var router_point = "/api/viaf";
     var api_url = "http://www.viaf.org/viaf/";
 
-    router.get(router_point + '/vid', function (req, res) {
+    router.get(router_point + '/viaf', function (req, res) {
         var viafId = req.query.vid,
             format = req.query.format;
 
         if (_.isNaN(viafId)) {
-            // if QID is not a number
             res.json({"error": "VID " + viafId + " is not a number"});
             return;
         }
 
-        var jsonFormat = "";
+        var suffix = "/";
         switch (format) {
             case "json":
-                jsonFormat = "/justlinks.json";
+                suffix = "/justlinks.json";
                 break;
-            case "html":
-                jsonFormat = ""
+            case "xml":
+                suffix = "/viaf.xml";
+                break;
+            case "rdf":
+                suffix = "/rdf.xml";
                 break;
             default:
                 console.log("Invalid Format");
         }
 
-        var url = [api_url, viafId, jsonFormat].join('');
-
+        var url = [api_url, viafId, suffix].join('');
         request.get(url, function (error, response, body) {
             if (error) {
                 res.send(error);

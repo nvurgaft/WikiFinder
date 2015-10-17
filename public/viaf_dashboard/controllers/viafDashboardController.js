@@ -16,12 +16,16 @@ function viafDashboardController($log, viafService) {
 
     vm.formatList = [
         {
-            name: "html",
-            value: 1
+            name: "xml"
         },
         {
-            name: "json",
-            value: 2
+            name: "json"
+        },
+        {
+            name: "rdf"
+        },
+        {
+            name: "html"
         }
     ];
 
@@ -38,13 +42,20 @@ function viafDashboardController($log, viafService) {
         vm.queryId = vid;
         viafService.get(vid, format.name)
             .then(function (response) {
-                if (vm.selectedFormat.name==='json') {
-                    vm.queryResult = JSON.parse(response);
-                } else {
-                    vm.queryResult = response;
+                switch(vm.selectedFormat.name) {
+                    case 'json':
+                        vm.queryResult = JSON.parse(response.data);
+                        break;
+                    case 'rdf':
+                    case 'html':
+                    case 'xml':
+                        vm.queryResult = response;
+                        break;
+                    default:
+                        vm.queryResult = "Invalid Format";
                 }
             }, function (response) {
-                vm.queryResult = response;
+                vm.queryResult = response.status + " : " + response.data;
             })
             .finally(function () {
                 vm.sendingQuery = false;

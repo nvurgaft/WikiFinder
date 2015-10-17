@@ -4,6 +4,7 @@
 var request = require('request');
 var _ = require('underscore');
 var Q = require('q');
+var Utils = require('./utils/wikidataRouteUtils');
 
 module.exports = function (router) {
 
@@ -152,63 +153,98 @@ module.exports = function (router) {
         })
     });
 
+    function promiseMePerson(argUrl) {
+        var deferred = Q.defer();
+        request.get(argUrl, function (error, response, body) {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                deferred.resolve(body);
+            }
+        });
+        return deferred.promise;
+    };
+
+    function marshalQuery(response) {
+        var obj = JSON.parse(response),
+            ids = _.pluck(obj.search, 'id'),
+            url = [
+                "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
+                ids.join('|'),
+                "&languages=", language,
+                "&format=", format
+            ].join("");
+        return url;
+    };
+
     /**
-     * Combine query calls to provide viaf id by name search
+     * Combine query calls to provide entity instance by name search
      */
-    router.get(router_point + "/getviaf", function (req, res) {
+    router.get(router_point + "/isHuman", function (req, res) {
 
         var search = req.query.search,      // full author name
             language = req.query.language,  // response data language
             format = req.query.format;      // format (json is nice)
 
-        url = [
+        var url = [
             "https://www.wikidata.org/w/api.php?action=wbsearchentities",
             search ? "&search=" + search : "",
             language ? "&language=" + language : "",
             format ? "&format=" + format : ""
         ].join("");
 
-
-        function firstPromise(argUrl) {
-            var deferred = Q.defer();
-            request.get(argUrl, function (error, response, body) {
-                if (error) {
-                    deferred.reject(error);
-                } else {
-                    deferred.resolve(body);
-                }
-            });
-            return deferred.promise;
-        };
-
-        firstPromise(url)
-            .then(function (response) {
-                var obj = JSON.parse(response),
-                    ids = _.pluck(obj.search, 'id'),
-                    url = [
-                        "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
-                        ids.join('|'),
-                        "&languages=", "en",
-                        "&format=", "json"
-                    ].join("");
-
-                request.get(url, function (error, response, body) {
+        promiseMePerson(url)
+            .then(marshalQuery)
+            .then(function (res_url) {
+                request.get(res_url, function (error, response, body) {
                     if (error) {
                         res.json(error);
-                        return;
                     } else {
-                        var viafids = [];
-                        var obj = JSON.parse(body).entities;
-                        for (var entity in obj) {
-                            if (obj[entity].claims.P214) {
-                                viafids.push(obj[entity].claims.P214[0].mainsnak.datavalue.value);
-                            }
-                        }
+                        var viafids = Utils.getInstanceOf(body); // 214 is viaf id
                         res.json(viafids);
                     }
                 });
-            }, function (response) {
-                res.json(response.error);
+            }, function (error) {
+                res.json(error);
+            })
+            .catch(function (err) {
+                res.send(err);
             });
     });
+
+    /**
+     * Combine query calls to provide viaf id by name search
+     */
+    router.get(router_point + "/getviaf", function (req, res) {
+
+            var search = req.query.search,      // full author name
+                language = req.query.language,  // response data language
+                format = req.query.format;      // format (json is nice)
+
+            var url = [
+                "https://www.wikidata.org/w/api.php?action=wbsearchentities",
+                search ? "&search=" + search : "",
+                language ? "&language=" + language : "",
+                format ? "&format=" + format : ""
+            ].join("");
+
+            promiseMePerson(url)
+                .then(marshalQuery)
+                .then(function (res_url) {
+                    request.get(res_url, function (error, response, body) {
+                        if (error) {
+                            res.json(error);
+                        } else {
+                            var viafids = Utils.getViafIdentifier(body); // 214 is viaf id
+                            res.json(viafids);
+                        }
+                    });
+                }, function (error) {
+                    res.json(error);
+                })
+                .catch(function (err) {
+                    res.send(err);
+                });
+        }
+    );
 };

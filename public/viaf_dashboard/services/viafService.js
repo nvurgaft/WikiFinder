@@ -9,22 +9,29 @@ function viafService($http, $log, VIAF_API_ROUTE, $q) {
     return {
         get: function (vid, format) {
             $log.debug("in " + serviceName + " fetching article data for vid: " + vid);
-            var deferred = $q.defer();
-            $http.get(url + "/vid", {
+            return $http.get(url + "/viaf", {
                 params: {
                     vid: vid,
                     format: format
                 }
+            }).then(function (response) {
+                if (format==='html' || format==='xml') {
+                    console.debug("format is " + format);
+                    console.debug("response: " + JSON.stringify(response.data));
+                    if (typeof DOMParser != "undefined") {
+                        var parser = new DOMParser();
+                        return parser.parseFromString(response.data, "text/xml");
+                    } else {
+                        var doc = new ActiveXObject("Microsoft.XMLDOM");
+                        doc.async = false;
+                        return doc.loadXML(response.data);
+                    }
+                } else {
+                    return response;
+                }
+            })['catch'](function (err) {
+                throw err;
             })
-                .then(function (response) {
-                    deferred.resolve(response.data);
-                }, function (response) {
-                    deferred.reject(response.status + " : " + response.data);
-                })
-                .catch(function (err) {
-                    deferred.reject(err);
-                });
-            return deferred.promise;
         }
     }
 }

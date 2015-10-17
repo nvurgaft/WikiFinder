@@ -82,11 +82,11 @@
                             <span class="fa fa-spin fa-refresh fa-2x"></span>
                         </div>
                         <div ng-hide="vm.sendingQuery">
-                            <pre>{{vm.queryResult | json}}</pre>
+                            <pre>{{vm.queryResult}}</pre>
                         </div>
 
                     </tab>
-                    <tab>
+                    <tab ng-if="vm.selectedFormat.name==='json'">
                         <tab-heading>
                             <i class=""></i> Pretty JSON
                         </tab-heading>
@@ -97,6 +97,23 @@
                         <div ng-hide="vm.sendingQuery">
                             <div ng-if="vm.queryResult">
                                 <json-tree object="vm.queryResult"></json-tree>
+                            </div>
+                            <div ng-if="!vm.queryResult">
+                                <h4>Nothing to show</h4>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab ng-if="vm.selectedFormat.name!=='json'">
+                        <tab-heading>
+                            <i class=""></i> Pretty Markup
+                        </tab-heading>
+
+                        <div class="center-block" ng-show="vm.sendingQuery">
+                            <span class="fa fa-spin fa-refresh fa-2x"></span>
+                        </div>
+                        <div ng-hide="vm.sendingQuery">
+                            <div ng-if="vm.queryResult">
+                                <div ng-bind-html="vm.queryResult"></div>
                             </div>
                             <div ng-if="!vm.queryResult">
                                 <h4>Nothing to show</h4>
