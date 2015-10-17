@@ -46,6 +46,6 @@ function config($stateProvider, $urlRouterProvider) {
 
 angular
     .module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'angular-json-tree', 'ngAnimate'])
-    .value("WIKIDATA_API_ROUTE", "http://localhost:3000/api/wikidata")
-    .value("VIAF_API_ROUTE", "http://localhost:3000/api/viaf")
+    .value("WIKIDATA_API_ROUTE", "./api/wikidata")
+    .value("VIAF_API_ROUTE", "./api/viaf")
     .config(config);

@@ -7,7 +7,7 @@ var _ = require('underscore');
 module.exports = function (router) {
 
     var router_point = "/api/viaf";
-    var api_url = "http://www.viaf.org/viaf/";
+    var api_url = "https://www.viaf.org/viaf/";
 
     router.get(router_point + '/viaf', function (req, res) {
         var viafId = req.query.vid,
@@ -28,6 +28,9 @@ module.exports = function (router) {
                 break;
             case "rdf":
                 suffix = "/rdf.xml";
+                break;
+            case "html":
+                suffix = "/";
                 break;
             default:
                 console.log("Invalid Format");

@@ -20,7 +20,7 @@ function linkerController($log, wikidataService, viafService, PreferencesService
         vm.viafRequest = "";
     };
 
-    vm.searchName = function(name) {
+    vm.searchName = function (name) {
         vm.processWikidataRequest(name);
     };
 
@@ -57,9 +57,9 @@ function linkerController($log, wikidataService, viafService, PreferencesService
         vm.processingViafSegment = true;
         viafService.get(query, 'json')
             .then(function (response) {
-                vm.viafQueryResult = JSON.parse(response);
+                vm.viafQueryResult = JSON.parse(response.data);
             }, function (response) {
-                vm.viafQueryResult = response;
+                vm.viafQueryResult = response.status + " : " + response.data;
             })
             .finally(function () {
                 vm.processingViafSegment = false;
@@ -67,16 +67,16 @@ function linkerController($log, wikidataService, viafService, PreferencesService
     };
 
     vm.testResponse = "";
-    vm.getViafByFullName = function(query) {
+    vm.getViafByFullName = function (query) {
         vm.processingWikidataSegment = true;
         wikidataService.getViafByName(query, "en", "json")
-            .then(function(response) {
+            .then(function (response) {
                 vm.testResponse = JSON.parse(response.data);
                 vm.processViafRequest(vm.testResponse);
-            }, function(response) {
+            }, function (response) {
                 vm.testResponse = JSON.parse(response.status + " : " + response.data);
             })
-            .finally(function() {
+            .finally(function () {
                 vm.processingWikidataSegment = false;
             })
     }

@@ -53,7 +53,6 @@ module.exports = function (router) {
         var address_params = [action, ids, languages, format].join('&');
         var url = [api_url, address_params].join('?');
 
-        console.log("url : " + url);
         request(url, function (error, response, body) {
             if (error) {
                 res.json(error);
@@ -153,30 +152,6 @@ module.exports = function (router) {
         })
     });
 
-    function promiseMePerson(argUrl) {
-        var deferred = Q.defer();
-        request.get(argUrl, function (error, response, body) {
-            if (error) {
-                deferred.reject(error);
-            } else {
-                deferred.resolve(body);
-            }
-        });
-        return deferred.promise;
-    };
-
-    function marshalQuery(response) {
-        var obj = JSON.parse(response),
-            ids = _.pluck(obj.search, 'id'),
-            url = [
-                "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
-                ids.join('|'),
-                "&languages=", language,
-                "&format=", format
-            ].join("");
-        return url;
-    };
-
     /**
      * Combine query calls to provide entity instance by name search
      */
@@ -228,8 +203,31 @@ module.exports = function (router) {
                 format ? "&format=" + format : ""
             ].join("");
 
+
+            function promiseMePerson(argUrl) {
+                var deferred = Q.defer();
+                request.get(argUrl, function (error, response, body) {
+                    if (error) {
+                        deferred.reject(error);
+                    } else {
+                        deferred.resolve(body);
+                    }
+                });
+                return deferred.promise;
+            };
+
             promiseMePerson(url)
-                .then(marshalQuery)
+                .then(function (response) {
+                    var obj = JSON.parse(response),
+                        ids = _.pluck(obj.search, 'id'),
+                        url = [
+                            "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
+                            ids.join('|'),
+                            "&languages=", language,
+                            "&format=", format
+                        ].join("");
+                    return url;
+                })
                 .then(function (res_url) {
                     request.get(res_url, function (error, response, body) {
                         if (error) {
