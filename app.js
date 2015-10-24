@@ -12,9 +12,15 @@ var app = express();
 var router = express.Router();
 
 var database = require('./config/database');
-// mongoose.connect(database.url);
+mongoose.connect(database.url, function(err) {
+    if (err) {
+        console.log("Could not connect to MongoDB");
+    }
+});
 
 app.use(cors());
+
+app.use(favicon(__dirname + "/public/images/favicon/favicon.ico"));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -51,32 +51,65 @@
                         </tab-heading>
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <p>Type a Wikidata API query in this text box and click Send.</p>
+                                <p>Enter an <a href="http://wdq.wmflabs.org/">wdq.wmflabs.org</a> API query in this text box and click Send.</p>
 
-                                <div class="input-group" style="margin-top: 1em;">
-                                    <div class="input-group-btn" dropdown dropdown-append-to-body>
-                                        <button id="btn-append-to-body" type="button" class="btn btn-info dropdown-toggle" dropdown-toggle>
-                                            {{vm.selectedType ? vm.selectedType.name : "Select Query Type"}} <span class="caret"></span>
+                                <div class="col-lg-1">
+                                    <div class="input-group" style="margin-top: 1em;">
+                                        <button class="btn btn-danger"
+                                                ng-click="vm.addQueryPart()"
+                                                tooltip="Add query parameter">
+                                            <span class="fa fa-plus"></span> Add
                                         </button>
-                                        <ul class="dropdown-menu" role="menu" aria-labelledby="btn-append-to-body">
-                                            <li role="menuitem" ng-repeat="item in vm.queryTypes" ng-click="vm.selectedType = item"><a ng-href="#">{{item.name}}</a></li>
-                                        </ul>
                                     </div>
-                                    <input type="text" class="form-control" ng-model="vm.wikidataQuery" placeholder="Type query here..">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary" ng-click="vm.sendWikidataRequest(vm.selectedType.name, vm.wikidataQuery)"
-                                                ng-disabled="vm.wikidataQuery.length===0">Send
+                                </div>
+
+                                <div class="col-lg-10">
+                                    <div ng-repeat="part in vm.queryParts">
+                                        <div class="input-group" style="margin-top: 1em;">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success"
+                                                        ng-click="vm.removeQueryPart($index)"
+                                                        ng-disabled="vm.queryParts.length <= 1"
+                                                        tooltip="Remove query parameter">
+                                                    <span class="fa fa-minus"></span>
+                                                </button>
+                                            </span>
+
+                                            <div class="input-group-btn" dropdown dropdown-append-to-body>
+                                                <button id="btn-append-to-body" type="button" class="btn btn-info dropdown-toggle" dropdown-toggle>
+                                                    {{part.queryType ? part.queryType : "Select Query Type"}} <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li role="menuitem" ng-repeat="item in vm.queryTypes" ng-click="part.queryType = item"><a ng-href="#">{{item}}</a></li>
+                                                </ul>
+                                            </div>
+                                            <input type="text" class="form-control" ng-model="part.queryBody" placeholder="Type query here..">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-warning" ng-click="part.queryBody = ''">
+                                                    <span class="fa fa-trash"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-1">
+                                    <div class="input-group" style="margin-top: 1em;">
+                                        <button class="btn btn-primary"
+                                                ng-click="vm.sendWikidataRequest()">
+                                            <i class="fa fa-paper-plane"></i> Send
                                         </button>
-                                        <button class="btn btn-warning" ng-click="vm.wikidataQuery = ''">
-                                            <span class="fa fa-trash"></span>
-                                        </button>
-                                    </span>
+                                    </div>
                                 </div>
                                 <a ng-click="vm.wikidataQueryCollapse=!vm.wikidataQueryCollapse" style="cursor: pointer;">More info...</a>
 
                                 <div collapse="vm.wikidataQueryCollapse">
                                     <div class="well well-sm">
-                                        <p><strong>Example:</strong> tree[4504][171,273,75,76,77,70,71,74,89]</p>
+                                        <p><strong>Example:</strong> claim[214] AND claim[31:5] AND claim[949]</p>
+                                        Get entities with VIAF identifiers,
+                                        with the property "Instance Of" equals to "Human"
+                                        and have additional identifier at the National Library of Israel.
+                                        <br>
 
                                         <p>More examples and info: <a ng-href="https://wdq.wmflabs.org/api_documentation.html">https://wdq.wmflabs.org/api_documentation.html</a>
                                         </p>

@@ -1,10 +1,9 @@
 /**
  * Created by Koby on 25-Sep-15.
  */
-function dashboardController($log, wikidataService) {
+function dashboardController($log, wikidataService, PreferencesService) {
     var vm = this;
 
-    vm.wikidataQuery = "";
     vm.qQuery = "";
 
     vm.sendingQuery = false;
@@ -12,19 +11,23 @@ function dashboardController($log, wikidataService) {
     vm.wikidataQueryCollapse = true;
     vm.qidQueryCollapse = true;
 
-    vm.queryTypes = [
-        {name: "claim", value: 1},
-        {name: "noclaim", value: 2},
-        {name: "string", value: 3},
-        {name: "ids", value: 4},
-        {name: "tree", value: 5},
-        {name: "web", value: 6},
-        {name: "around", value: 7},
-        {name: "between", value: 8},
-        {name: "quantity", value: 9},
-        {name: "items", value: 10},
-        {name: "link", value: 11}
-    ];
+    vm.queryParts = [{
+        queryType: "claim",
+        queryBody: ""
+    }];
+
+    vm.addQueryPart = function() {
+        vm.queryParts.push({
+            queryType: "claim",
+            queryBody: ""
+        })
+    };
+
+    vm.removeQueryPart = function(index) {
+        vm.queryParts.splice(index, 1);
+    };
+
+    vm.queryTypes = ["claim", "noclaim", "string", "ids", "tree", "web", "around", "between", "quantity", "items", "link"];
 
     vm.clearQuery = function () {
         vm.wikidataQuery = "";
@@ -32,28 +35,41 @@ function dashboardController($log, wikidataService) {
 
     // Send QID
     vm.sendQIDRequest = function (query) {
+        var queryLang = PreferencesService.getLanguage().value;
         vm.sendingQuery = true;
-        wikidataService.get(query)
+        wikidataService.get(query, queryLang)
             .then(function (response) {
-                vm.queryResult = (JSON.parse(response)).entities['Q' + query];
+                vm.queryResult = (JSON.parse(response.data)).entities['Q' + query];
             }, function (response) {
-                vm.queryResult = response;
+                vm.queryResult = response.status + " " + response.data;
             })
-            .finally(function () {
+            ['finally'](function () {
                 vm.sendingQuery = false;
             });
     };
 
     // Send Wikidata query
-    vm.sendWikidataRequest = function (type, field) {
+    vm.sendWikidataRequest = function() {
+        var finalRequest = "";
+        _.each(vm.queryParts, function(part, index, list) {
+            if (part.queryType.length===0 || part.queryBody.length===0) {
+                return;
+            }
+            finalRequest += part.queryType + "[" + part.queryBody + "]";
+            if (index!==list.length-1) {
+                finalRequest += " AND ";
+            }
+        });
+        $log.debug("request string: " + finalRequest);
+
         vm.sendingQuery = true;
-        wikidataService.sendWikidataQuery(type, field)
+        wikidataService.sendWikidataQuery(finalRequest)
             .then(function (response) {
-                vm.queryResult = JSON.parse(response);
+                vm.queryResult = JSON.parse(response.data);
             }, function (response) {
-                vm.queryResult = response;
+                vm.queryResult = response.status + " " + response.data;
             })
-            .finally(function () {
+            ['finally'](function () {
                 vm.sendingQuery = false;
             });
     }

@@ -1,49 +1,28 @@
 /**
  * Created by Koby on 26-Sep-15.
  */
-function wikidataService($http, $log, WIKIDATA_API_ROUTE, $q) {
+function wikidataService($http, $log, WIKIDATA_API_ROUTE) {
 
     var url = WIKIDATA_API_ROUTE;
     var serviceName = "wikidataService";
 
     return {
-        get: function (qItem) {
+        get: function (qItem, language) {
             $log.debug("in " + serviceName + " fetching article data for qid: " + qItem);
-            var deferred = $q.defer();
-            $http.get(url + "/q", {
+            return $http.get(url + "/q", {
                 params: {
                     qItem: qItem,
-                    language: "en"
+                    language: language
                 }
-            })
-                .then(function (response) {
-                    deferred.resolve(response.data);
-                }, function (response) {
-                    deferred.reject(response.status + " : " + response.data);
-                })
-                .catch(function (err) {
-                    deferred.reject(err);
-                });
-            return deferred.promise;
+            });
         },
-        sendWikidataQuery: function (type, field) {
-            $log.debug("in " + serviceName + " fetching wikidata page for qid -> type: " + type + ", field: " + field);
-            var deferred = $q.defer();
-            $http.get(url + "/wikidata_api", {
+        sendWikidataQuery: function (fullQuery) {
+            $log.debug("in " + serviceName + " fetching wikidata page for qid -> query:" + fullQuery);
+            return $http.get(url + "/wikidata_api", {
                 params: {
-                    type: type,
-                    field: field
+                    query: fullQuery
                 }
             })
-                .then(function (response) {
-                    deferred.resolve(response.data);
-                }, function (response) {
-                    deferred.reject(response.status + " : " + response.data);
-                })
-                .catch(function (err) {
-                    deferred.reject(err);
-                });
-            return deferred.promise;
         },
         getEntitiesByName: function(search, language, format) {
             $log.debug("in " + serviceName + " fetching wikidata entity names");
@@ -55,9 +34,9 @@ function wikidataService($http, $log, WIKIDATA_API_ROUTE, $q) {
                 }
             });
         },
-        getEntitiesByQid: function(item, property, language) {
+        getPropertyForItem: function(item, property, language) {
             $log.debug("in " + serviceName + " fetching wikidata entity ids");
-            return $http.get(url + '/wbgetclaims', {
+            return $http.get(url + '/get-claim-for-entity', {
                 params: {
                     entity: item,
                     claim: property,
@@ -65,11 +44,11 @@ function wikidataService($http, $log, WIKIDATA_API_ROUTE, $q) {
                 }
             });
         },
-        getViafByName: function(search, language, format) {
+        getViafByName: function(entityName, language, format) {
             $log.debug("in " + serviceName + " fetching wikidata entity ids");
-            return $http.get(url + '/getviaf', {
+            return $http.get(url + '/get-entities-by-name', {
                 params: {
-                    search: search,
+                    entityName: entityName,
                     language: language,
                     format: format
                 }

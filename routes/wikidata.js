@@ -16,11 +16,9 @@ module.exports = function (router) {
     router.get(router_point + '/wikidata_api', function (req, res) {
 
         var api_url = "https://wdq.wmflabs.org/api?q=",
-            type = req.query.type,
-            field = req.query.field;
+            query = req.query.query;
 
-        var url = [api_url, type, field].join('');
-
+        var url = [api_url, query].join('');
         request(url, function (error, response, body) {
             if (error) {
                 res.send(error);
@@ -35,8 +33,8 @@ module.exports = function (router) {
      */
     router.get(router_point + '/q', function (req, res) {
 
-        var api_url = "https://www.wikidata.org/w/api.php";
-        var qItem = req.query.qItem,
+        var api_url = "https://www.wikidata.org/w/api.php",
+            qItem = req.query.qItem,
             language = req.query.language;
 
         // if QID is not a number
@@ -90,10 +88,9 @@ module.exports = function (router) {
     });
 
     /**
-     *  Search Wikidata entities by entity ID
-     *  Note: This method can accept a list of entity items and resolve all of them
+     *  Search Wikidata entities by entity name
      */
-    router.get(router_point + '/wbGetEntities', function (req, res) {
+    router.get(router_point + '/get-entities-by-qid', function (req, res) {
         var qItems = req.query.qItems,
             language = req.query.language,
             format = req.query.format;
@@ -125,7 +122,7 @@ module.exports = function (router) {
     /**
      * Get a claim P for entity Q
      */
-    router.get(router_point + '/wbgetclaims', function (res, req) {
+    router.get(router_point + '/get-claim-for-entity', function (res, req) {
 
         var entity = req.params.entity,
             claim = req.params.claim,
@@ -168,8 +165,16 @@ module.exports = function (router) {
             format ? "&format=" + format : ""
         ].join("");
 
-        promiseMePerson(url)
-            .then(marshalQuery)
+
+        var deferred = Q.defer();
+        request.get(url, function (error, response, body) {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                deferred.resolve(body);
+            }
+        });
+        deferred.promise
             .then(function (res_url) {
                 request.get(res_url, function (error, response, body) {
                     if (error) {
@@ -190,53 +195,32 @@ module.exports = function (router) {
     /**
      * Combine query calls to provide viaf id by name search
      */
-    router.get(router_point + "/getviaf", function (req, res) {
+    router.get(router_point + "/get-entities-by-name", function (req, res) {
 
-            var search = req.query.search,      // full author name
+            var entityName = req.query.entityName,      // full author name
                 language = req.query.language,  // response data language
                 format = req.query.format;      // format (json is nice)
 
             var url = [
-                "https://www.wikidata.org/w/api.php?action=wbsearchentities",
-                search ? "&search=" + search : "",
-                language ? "&language=" + language : "",
-                format ? "&format=" + format : ""
+                "https://www.wikidata.org/w/api.php?action=wbgetentities",
+                "&sites=", language, "wiki",
+                "&titles=", entityName,
+                "&languages=", language,
+                "&format=", format
             ].join("");
 
-
-            function promiseMePerson(argUrl) {
-                var deferred = Q.defer();
-                request.get(argUrl, function (error, response, body) {
-                    if (error) {
-                        deferred.reject(error);
-                    } else {
-                        deferred.resolve(body);
-                    }
-                });
-                return deferred.promise;
-            };
-
-            promiseMePerson(url)
+            var deferred = Q.defer();
+            request.get(url, function (error, response, body) {
+                if (error) {
+                    deferred.reject(error);
+                } else {
+                    deferred.resolve(body);
+                }
+            });
+            deferred.promise
                 .then(function (response) {
-                    var obj = JSON.parse(response),
-                        ids = _.pluck(obj.search, 'id'),
-                        url = [
-                            "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
-                            ids.join('|'),
-                            "&languages=", language,
-                            "&format=", format
-                        ].join("");
-                    return url;
-                })
-                .then(function (res_url) {
-                    request.get(res_url, function (error, response, body) {
-                        if (error) {
-                            res.json(error);
-                        } else {
-                            var viafids = Utils.getViafIdentifier(body); // 214 is viaf id
-                            res.json(viafids);
-                        }
-                    });
+                    var viafids = Utils.getViafIdentifier(response); // 214 is viaf id
+                    res.json(viafids);
                 }, function (error) {
                     res.json(error);
                 })

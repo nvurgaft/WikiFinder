@@ -26,7 +26,8 @@ function linkerController($log, wikidataService, viafService, PreferencesService
 
     vm.processWikidataRequest = function (name) {
         vm.processingWikidataSegment = true;
-        wikidataService.getEntitiesByName(name, "en", "json")
+        var queryLanguage  = PreferencesService.getLanguage().value;
+        wikidataService.getEntitiesByName(name, queryLanguage, "json")
             .then(function (response) {
                 vm.wikidataQueryResult = JSON.parse(response.data);
             }, function (response) {
@@ -40,7 +41,8 @@ function linkerController($log, wikidataService, viafService, PreferencesService
     // Send QID
     vm.getQIDProperties = function (query) {
         vm.sendingQuery = true;
-        wikidataService.get(query)
+        var queryLanguage  = PreferencesService.getLanguage().value;
+        wikidataService.get(query, queryLanguage)
             .then(function (response) {
                 var data = (JSON.parse(response)).entities['Q' + query];
                 vm.wikidataItemPropertiesList = data.claims;
@@ -77,6 +79,7 @@ function linkerController($log, wikidataService, viafService, PreferencesService
         vm.processingWikidataSegment = true;
         wikidataService.getViafByName(query, "en", "json")
             .then(function (response) {
+                console.debug("response: " + JSON.stringify(response));
                 vm.testResponse = JSON.parse(response.data);
                 vm.processViafRequest(vm.testResponse);
             }, function (response) {
