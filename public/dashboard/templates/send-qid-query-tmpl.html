@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>Type a Wikidata Q code subject in this text box and click Send.</p>
+
+        <div class="input-group" style="margin-top: 1em;">
+            <span class="input-group-addon">Q</span>
+            <input type="text" class="form-control" ng-model="vm.qQuery" placeholder="Type Q values">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" ng-click="vm.sendQIDRequest(vm.qQuery)"
+                        ng-disabled="vm.qQuery.length===0">Send
+                </button>
+
+                <button class="btn btn-warning" ng-click="vm.qQuery = ''">
+                    <span class="fa fa-trash"></span>
+                </button>
+            </span>
+        </div>
+        <a ng-click="vm.qidQueryCollapse=!vm.qidQueryCollapse" style="cursor: pointer;">More info...</a>
+
+        <div collapse="vm.qidQueryCollapse">
+            <div class="well well-sm">
+                <p><strong>Example:</strong> Q42, should bring an article about: <em>Douglas Adams</em></p>
+
+                <p>More examples and info: <a ng-href="https://wdq.wmflabs.org/api_documentation.html">https://wdq.wmflabs.org/api_documentation.html</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

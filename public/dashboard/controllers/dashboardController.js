@@ -73,6 +73,10 @@ function dashboardController($log, wikidataService, PreferencesService) {
                 vm.sendingQuery = false;
             });
     }
+
+    vm.saveEntities = function(data) {
+        
+    }
 }
 
 angular.module('app').controller('dashboardController', dashboardController);

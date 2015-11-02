@@ -32,6 +32,11 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: 'linker/linker.html',
             controller: 'linkerController as vm'
         })
+        .state('main.entry.dumper', {
+            url: '/dumper',
+            templateUrl: 'dump/dumper.html',
+            controller: 'dumperController as vm'
+        })
         .state('main.entry.database', {
             url: '/database',
             templateUrl: 'database/database.html',
