@@ -1,5 +1,42 @@
 <div class="container">
 
-    <p>database model placeholder</p>
+    <p>Database view: This UI will help us handle records and other things currently of the application database</p>
+
+    <table st-table="vm.rowCollection" class="table table-striped">
+        <thead>
+        <tr>
+            <th st-sort="qid">first name</th>
+            <th st-sort="dateCreated">Created at</th>
+            <th st-sort="lastUpdated">Last modified</th>
+            <th st-sort="name">name</th>
+            <th st-sort="instanceOf">Instance of</th>
+            <th st-sort="viafIndentifier">VIAF</th>
+            <th st-sort="nliIdentifier">NLI</th>
+        </tr>
+        <tr>
+            <th colspan="7">
+                <input st-search placeholder="search stored wikidata records" class="input-sm form-control" type="search"/>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in vm.rowCollection">
+            <td>{{row.qid}}</td>
+            <td>{{row.dateCreated | date:'medium'}}</td>
+            <td>{{row.lastUpdated | date:'medium'}}</td>
+            <td>{{row.name}}</td>
+            <td>{{row.instanceOf}}</td>
+            <td>{{row.viafIndentifier}}</td>
+            <td>{{row.nliIdentifier}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="7" class="text-center">
+                <div st-pagination="" st-items-by-page="vm.itemsByPage" st-displayed-pages="vm.displayedPages"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
 
 </div>

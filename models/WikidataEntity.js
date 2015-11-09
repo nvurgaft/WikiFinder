@@ -3,7 +3,10 @@
  */
 var mongoose = require('mongoose');
 
-module.exports = mongoose.model("WikidataSubject", {
+module.exports = mongoose.model("WikidataEntity", {
+    qid: Number,
+    dateCreated: Date,
+    lastUpdated: Date,
     name: String,
     instanceOf: String,
     viafIndentifier: Number,

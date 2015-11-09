@@ -50,7 +50,7 @@ function config($stateProvider, $urlRouterProvider) {
 }
 
 angular
-    .module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'angular-json-tree', 'ngAnimate'])
+    .module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'angular-json-tree', 'ngAnimate', 'smart-table'])
     .value("WIKIDATA_API_ROUTE", "./api/wikidata")
     .value("VIAF_API_ROUTE", "./api/viaf")
     .config(config);

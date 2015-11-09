@@ -14,9 +14,12 @@ var router = express.Router();
 var database = require('./config/database');
 mongoose.connect(database.url, function(err) {
     if (err) {
-        console.log("Could not connect to MongoDB");
+        console.log("ERROR: Could not connect to MongoDB service");
     }
 });
+
+require('./db/wikidata_entity')(router);
+require('./db/viaf_entity')(router);
 
 app.use(cors());
 
