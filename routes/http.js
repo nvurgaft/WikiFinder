@@ -9,7 +9,7 @@ module.exports = function(router) {
         var url = req.params.url;
         request.get(url, function(error, response, body) {
             if (error) {
-                res.send(error);
+                res.status(500).send(error);
                 return;
             }
             res.send(body);

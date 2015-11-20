@@ -15,6 +15,8 @@ var database = require('./config/database');
 mongoose.connect(database.url, function(err) {
     if (err) {
         console.log("ERROR: Could not connect to MongoDB service");
+    } else {
+        console.log("A running MongoDB daemon found");
     }
 });
 

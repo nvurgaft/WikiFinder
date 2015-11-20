@@ -41,21 +41,23 @@ function viafDashboardController($log, viafService) {
         vm.sendingQuery = true;
         vm.queryId = vid;
         viafService.get(vid, format.name)
-            .then(function (response) {
+            .then(function (datum) {
                 switch(vm.selectedFormat.name) {
                     case 'json':
-                        vm.queryResult = JSON.parse(response.data);
+                        $log.debug("response: " + JSON.stringify(datum));
+                        vm.queryResult = JSON.parse(datum);
                         break;
                     case 'rdf':
                     case 'html':
                     case 'xml':
-                        vm.queryResult = response;
+                        vm.queryResult = datum;
                         break;
                     default:
                         vm.queryResult = "Invalid Format";
                 }
-            }, function (response) {
-                vm.queryResult = response.status + " : " + response.data;
+            }, function (error) {
+                $log.error(error);
+                vm.queryResult = [];
             })
             .finally(function () {
                 vm.sendingQuery = false;

@@ -14,9 +14,7 @@ function databaseService($http, $log, $q, WIKIDATA_API_ROUTE) {
                 }, function (response) {
                     $log.error(serviceName + ": Error in getEntities -> " + response.status)
                     return $q.reject(response.status + " : " + response.data);
-                })['catch'](function (err) {
-                return $q.reject(err);
-            });
+                });
         },
         getArticles: function () {
             return $http.get(ur + "/api/articles")
@@ -25,9 +23,7 @@ function databaseService($http, $log, $q, WIKIDATA_API_ROUTE) {
                 }, function (response) {
                     $log.error(serviceName + ": Error in getArticles -> " + response.status)
                     return $q.reject(response.status + " : " + response.data);
-                })['catch'](function (err) {
-                return $q.reject(err);
-            });
+                });
         }
     }
 }

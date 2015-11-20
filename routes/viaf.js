@@ -9,7 +9,7 @@ module.exports = function (router) {
     var router_point = "/api/viaf";
     var api_url = "https://www.viaf.org/viaf/";
 
-    router.get(router_point + '/viaf', function (req, res) {
+    router.get(router_point, function (req, res) {
         var viafId = req.query.vid,
             format = req.query.format;
 
@@ -34,15 +34,19 @@ module.exports = function (router) {
                 break;
             default:
                 console.log("Invalid Format");
+                res.send("Invalid Format");
+                return;
         }
 
         var url = [api_url, viafId, suffix].join('');
+        console.log("request url: " + url);
         request.get(url, function (error, response, body) {
             if (error) {
-                res.send(error);
+                res.status(500).send(error);
                 return;
             }
             if (format === "json") {
+                console.log(JSON.parse(response));
                 res.json(body);
             } else {
                 res.send(body);

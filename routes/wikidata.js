@@ -21,7 +21,7 @@ module.exports = function (router) {
         var url = [api_url, query].join('');
         request(url, function (error, response, body) {
             if (error) {
-                res.send(error);
+                res.status(500).send(error);
                 return;
             }
             res.json(body);
@@ -39,7 +39,7 @@ module.exports = function (router) {
 
         // if QID is not a number
         if (_.isNaN(qItem)) {
-            res.json({"error": "QID " + qItem + " is not a number"});
+            res.status(400).json({"error": "QID " + qItem + " is not a number"});
             return;
         }
 
@@ -53,7 +53,7 @@ module.exports = function (router) {
 
         request(url, function (error, response, body) {
             if (error) {
-                res.json(error);
+                res.status(500).json(error);
                 return;
             }
             res.json(body);
@@ -80,7 +80,7 @@ module.exports = function (router) {
 
         request.get(url, function (error, response, body) {
             if (error) {
-                res.json(error);
+                res.status(500).json(error);
                 return;
             }
             res.json(body);
@@ -97,7 +97,7 @@ module.exports = function (router) {
 
         _.each(qItems, function (item) {
             if (_.isNaN(item)) {
-                res.send({"error": "QID " + item + " is not a number"});
+                res.status(400).send({"error": "QID " + item + " is not a number"});
                 return;
             }
         });
@@ -112,7 +112,7 @@ module.exports = function (router) {
 
         request.get(url, function (error, response, body) {
             if (error) {
-                res.json(error);
+                res.status(500).json(error);
                 return;
             }
             res.json(body)
@@ -142,7 +142,7 @@ module.exports = function (router) {
 
         request.get(url, function (error, response, body) {
             if (error) {
-                res.json(error);
+                res.status(500).json(error);
                 return;
             }
             res.json(body)
@@ -166,30 +166,26 @@ module.exports = function (router) {
         ].join("");
 
 
-        var deferred = Q.defer();
         request.get(url, function (error, response, body) {
             if (error) {
-                deferred.reject(error);
+                Q.reject(error);
             } else {
-                deferred.resolve(body);
+                return body;
             }
-        });
-        deferred.promise
-            .then(function (res_url) {
-                request.get(res_url, function (error, response, body) {
-                    if (error) {
-                        res.json(error);
-                    } else {
-                        var viafids = Utils.getInstanceOf(body); // 214 is viaf id
-                        res.json(viafids);
-                    }
-                });
-            }, function (error) {
-                res.json(error);
-            })
-            .catch(function (err) {
-                res.send(err);
+        }).then(function (res_url) {
+            request.get(res_url, function (error, response, body) {
+                if (error) {
+                    res.status(500).json(error);
+                } else {
+                    var viafids = Utils.getInstanceOf(body); // 214 is viaf id
+                    res.json(viafids);
+                }
             });
+        }, function (error) {
+            res.status(500).json(error);
+        }).catch(function (err) {
+            res.status(500).send(err);
+        });
     });
 
     /**
@@ -209,24 +205,19 @@ module.exports = function (router) {
                 "&format=", format
             ].join("");
 
-            var deferred = Q.defer();
             request.get(url, function (error, response, body) {
                 if (error) {
-                    deferred.reject(error);
-                } else {
-                    deferred.resolve(body);
+                    return Q.reject(error);
                 }
+                return body;
+            }).then(function (response) {
+                var viafids = Utils.getViafIdentifier(response); // 214 is viaf id
+                res.json(viafids);
+            }, function (error) {
+                res.status(500).json(error);
+            }).catch(function (err) {
+                res.send(err);
             });
-            deferred.promise
-                .then(function (response) {
-                    var viafids = Utils.getViafIdentifier(response); // 214 is viaf id
-                    res.json(viafids);
-                }, function (error) {
-                    res.json(error);
-                })
-                .catch(function (err) {
-                    res.send(err);
-                });
         }
     );
 };

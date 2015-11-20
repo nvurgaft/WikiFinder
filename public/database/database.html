@@ -1,26 +1,100 @@
 <div class="container">
-
     <p>Database view: This UI will help us handle records and other things currently of the application database</p>
 
-    <table st-table="vm.rowCollection" class="table table-striped">
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <form class="form-horizontal" name="newRecordForm" ng-submit="vm.submit()" novalidate>
+                <div class="form-group" ng-class="{'has-success': newRecordForm.newQid.$valid}">
+                    <label for="newQid" class="col-sm-2 control-label">QID</label>
+
+                    <div class="col-sm-10">
+                        <input type="number"
+                               name="newQid"
+                               id="newQid"
+                               class="form-control"
+                               ng-model="vm.newRecord.qid"
+                               placeholder="QID" required>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-success': newRecordForm.newName.$valid}">
+                    <label for="newName" class="col-sm-2 control-label">Name</label>
+
+                    <div class="col-sm-10">
+                        <input type="text"
+                               name="newName"
+                               id="newName"
+                               class="form-control"
+                               ng-model="vm.newRecord.name"
+                               placeholder="Name" required>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-success': newRecordForm.newInstanceOf.$valid}">
+                    <label for="newInstanceOf" class="col-sm-2 control-label">Instance of</label>
+
+                    <div class="col-sm-10">
+                        <input type="text"
+                               name="newInstanceOf"
+                               id="newInstanceOf"
+                               class="form-control"
+                               ng-model="vm.newRecord.instanceOf"
+                               placeholder="Instance of" required>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-success': newRecordForm.newViafID.$valid}">
+                    <label for="newViafID" class="col-sm-2 control-label">Viaf ID</label>
+
+                    <div class="col-sm-10">
+                        <input type="text"
+                               name="newViafID"
+                               id="newViafID"
+                               class="form-control"
+                               ng-model="vm.newRecord.viafIndentifier"
+                               placeholder="VIAF ID" required>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-success': newRecordForm.newNliID.$valid}">
+                    <label for="newNliID" class="col-sm-2 control-label">NLI ID</label>
+
+                    <div class="col-sm-10">
+                        <input name="newNliID"
+                               type="text"
+                               id="newNliID"
+                               class="form-control"
+                               ng-model="vm.newRecord.nliIdentifier"
+                               placeholder="NLI ID" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" ng-disabled="newRecordForm.$invalid" class="btn btn-default">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table st-table="vm.displayedCollection" st-safe-src="vm.rowCollection" class="table table-striped">
         <thead>
         <tr>
-            <th st-sort="qid">first name</th>
+            <th st-sort="qid">QID</th>
             <th st-sort="dateCreated">Created at</th>
             <th st-sort="lastUpdated">Last modified</th>
             <th st-sort="name">name</th>
             <th st-sort="instanceOf">Instance of</th>
             <th st-sort="viafIndentifier">VIAF</th>
             <th st-sort="nliIdentifier">NLI</th>
+            <th></th>
         </tr>
         <tr>
-            <th colspan="7">
-                <input st-search placeholder="search stored wikidata records" class="input-sm form-control" type="search"/>
+            <th colspan="8">
+                <input st-search placeholder="search stored wikidata records" class="input-sm form-control"
+                       type="search"/>
             </th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="row in vm.rowCollection">
+        <tr ng-repeat="row in vm.displayedCollection">
             <td>{{row.qid}}</td>
             <td>{{row.dateCreated | date:'medium'}}</td>
             <td>{{row.lastUpdated | date:'medium'}}</td>
@@ -28,15 +102,21 @@
             <td>{{row.instanceOf}}</td>
             <td>{{row.viafIndentifier}}</td>
             <td>{{row.nliIdentifier}}</td>
+            <td>
+                <button class="btn btn-danger"
+                        ng-click="vm.removeRecord(row)">
+                    <span class="fa fa-close"></span>
+                </button>
+            </td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="7" class="text-center">
-                <div st-pagination="" st-items-by-page="vm.itemsByPage" st-displayed-pages="vm.displayedPages"></div>
+            <td colspan="8" class="text-center">
+                <div st-pagination="" st-items-by-page="vm.itemsByPage"
+                     st-displayed-pages="vm.displayedPages"></div>
             </td>
         </tr>
         </tfoot>
     </table>
-
 </div>
