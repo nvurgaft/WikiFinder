@@ -25,7 +25,7 @@
                                                 ng-disabled="vm.viafQuery.length===0">Send
                                         </button>
                                         <!-- Single button using append-to-body -->
-                                        <div class="btn-group" dropdown dropdown-append-to-body>
+                                        <div class="btn-group" uib-dropdown dropdown-append-to-body>
                                             <button id="btn-append-to-body" type="button" class="btn btn-info" dropdown-toggle>
                                                 {{vm.selectedFormat.name}} <span class="caret"></span>
                                             </button>
@@ -40,7 +40,7 @@
                                 </div>
                                 <a ng-click="vm.qidQueryCollapse=!vm.qidQueryCollapse" style="cursor: pointer;">More info...</a>
 
-                                <div collapse="vm.qidQueryCollapse">
+                                <div uib-collapse="vm.qidQueryCollapse">
                                     <div class="well well-sm">
                                         <p><strong>Example:</strong> 102333412, should bring an article about: <i>Austen, Jane, 1775-1817</i></p>
 

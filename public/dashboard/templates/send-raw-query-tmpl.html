@@ -24,7 +24,7 @@
                         </button>
                     </span>
 
-                    <div class="input-group-btn" dropdown dropdown-append-to-body>
+                    <div class="input-group-btn" uib-dropdown dropdown-append-to-body>
                         <button id="btn-append-to-body" type="button" class="btn btn-info dropdown-toggle" dropdown-toggle>
                             {{part.queryType ? part.queryType : "Select Query Type"}} <span class="caret"></span>
                         </button>
@@ -52,7 +52,7 @@
         </div>
         <a ng-click="vm.wikidataQueryCollapse=!vm.wikidataQueryCollapse" style="cursor: pointer;">More info...</a>
 
-        <div collapse="vm.wikidataQueryCollapse">
+        <div uib-collapse="vm.wikidataQueryCollapse">
             <div class="well well-sm">
                 <p><strong>Example:</strong> claim[214] AND claim[31:5] AND claim[949]</p>
                 Get entities with VIAF identifiers,

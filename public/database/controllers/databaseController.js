@@ -5,8 +5,8 @@ function databaseController($log, databaseService) {
 
     var vm = this;
 
-    vm.itemsByPage=10;
-    vm.displayedPages=10;
+    vm.itemsByPage = 10;
+    vm.displayedPages = 10;
 
     vm.rowCollection = [];
 
@@ -18,7 +18,13 @@ function databaseController($log, databaseService) {
         nliIdentifier: ""
     };
 
-    vm.submit = function() {
+    vm.isCollapsed = true;
+    vm.toggleCollapse = function () {
+        vm.isCollapsed = !vm.isCollapsed;
+        console.log(vm.isCollapsed);
+    };
+
+    vm.submit = function () {
         $log.debug("submit");
         vm.rowCollection.push(vm.newRecord);
         vm.newRecord = {
@@ -30,7 +36,7 @@ function databaseController($log, databaseService) {
         };
     };
 
-    vm.removeRecord = function(item) {
+    vm.removeRecord = function (item) {
         var idx = _.indexOf(vm.rowCollection, item);
         vm.rowCollection.splice(idx, 1);
     };

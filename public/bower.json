@@ -1,0 +1,30 @@
+{
+  "name": "wikifinder",
+  "homepage": "https://github.com/nvurgaft/WikiFinder",
+  "authors": [
+    "Nick <slipperygate@gmail.com>"
+  ],
+  "description": "bower.json file for wikifinder",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-animate": "~1.4.7",
+    "angular-bootstrap": "~0.14.3",
+    "angular-sanitize": "~1.4.6",
+    "angular": "~1.4.6",
+    "angular-ui-router": "~0.2.15",
+    "bootstrap": "~3.3.5",
+    "font-awesome": "~4.4.0",
+    "underscore": "~1.8.3",
+    "angular-json-tree": "*"
+  }
+}

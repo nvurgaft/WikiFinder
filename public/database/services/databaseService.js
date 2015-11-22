@@ -7,6 +7,15 @@ function databaseService($http, $log, $q, WIKIDATA_API_ROUTE) {
     var serviceName = "databaseService";
 
     return {
+        newEntity: function(entity) {
+            return $http.post(url + "/api/entities", entity)
+            .then(function(response) {
+                return response.data;
+            }, function(response) {
+                $log.error(serviceName + ": Error in newEntity -> " + response.status)
+                return $q.reject(response.status + " : " + response.data);
+            })
+        },
         getEntities: function () {
             return $http.get(url + "/api/entities")
                 .then(function (response) {

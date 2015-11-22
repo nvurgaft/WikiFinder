@@ -7,36 +7,41 @@
         <div class="panel-body">
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <tabset>
+                <uib-tabset>
                     <!-- plain qid -->
-                    <tab>
+                    <uib-tab>
                         <tab-heading>
                             <i class="fa fa-search"></i> Send QID
                         </tab-heading>
                         <div ng-include="'dashboard/templates/send-qid-query-tmpl.html'"></div>
-                    </tab>
+                    </uib-tab>
 
                     <!-- wikidata query -->
-                    <tab>
+                    <uib-tab>
                         <tab-heading>
                             <i class="fa fa-search"></i> Send Raw Query
                         </tab-heading>
                         <div ng-include="'dashboard/templates/send-raw-query-tmpl.html'"></div>
-                    </tab>
+                    </uib-tab>
                     <!-- save -->
-                    <tab>
+                    <uib-tab>
                         <tab-heading>
                             <i class="fa fa-save"></i> Save
                         </tab-heading>
 
-                        <p>save on db</p>
-                    </tab>
-                </tabset>
+                        <div style="margin: 1em;">
+                            <button class="btn btn-info"
+                                    ng-disabled="vm.queryResult.length===0"
+                                    ng-click="vm.saveWikidataResultOnDB()">Save Wikidata Result
+                            </button>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <tabset>
-                    <tab>
+                <uib-tabset>
+                    <uib-tab>
                         <tab-heading>
                             <i class=""></i> Raw Response
                         </tab-heading>
@@ -45,7 +50,9 @@
                             <form class="form-inline">
                                 <div class="form-group">
                                     <button class="btn btn-default" ng-click="vm.queryResult=''">Clean</button>
-                                    <button class="btn btn-default" ng-disabled="!vm.queryResult" ng-click="vm.saveEntities(vm.queryResult)">Save</button>
+                                    <button class="btn btn-default" ng-disabled="!vm.queryResult"
+                                            ng-click="vm.saveEntities(vm.queryResult)">Save
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -57,8 +64,8 @@
                             <pre>{{vm.queryResult | json}}</pre>
                         </div>
 
-                    </tab>
-                    <tab>
+                    </uib-tab>
+                    <uib-tab>
                         <tab-heading>
                             <i class=""></i> Pretty JSON
                         </tab-heading>
@@ -74,8 +81,8 @@
                                 <h4>Nothing to show</h4>
                             </div>
                         </div>
-                    </tab>
-                    <tab>
+                    </uib-tab>
+                    <uib-tab>
                         <tab-heading>
                             <i class="fa fa-camera"></i> Preview
                         </tab-heading>
@@ -85,8 +92,8 @@
                         <div ng-hide="vm.sendingQuery">
                             <div ng-include="'dashboard/templates/item-details.html'"></div>
                         </div>
-                    </tab>
-                </tabset>
+                    </uib-tab>
+                </uib-tabset>
             </div>
         </div>
     </div>

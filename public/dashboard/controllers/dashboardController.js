@@ -1,11 +1,12 @@
 /**
  * Created by Koby on 25-Sep-15.
  */
-function dashboardController($log, wikidataService, PreferencesService) {
+function dashboardController($log, wikidataService, PreferencesService, $uibModal) {
     var vm = this;
 
     vm.qQuery = "";
 
+    vm.queryResult = "";
     vm.sendingQuery = false;
 
     vm.wikidataQueryCollapse = true;
@@ -16,14 +17,14 @@ function dashboardController($log, wikidataService, PreferencesService) {
         queryBody: ""
     }];
 
-    vm.addQueryPart = function() {
+    vm.addQueryPart = function () {
         vm.queryParts.push({
             queryType: "claim",
             queryBody: ""
         })
     };
 
-    vm.removeQueryPart = function(index) {
+    vm.removeQueryPart = function (index) {
         vm.queryParts.splice(index, 1);
     };
 
@@ -44,19 +45,19 @@ function dashboardController($log, wikidataService, PreferencesService) {
                 vm.queryResult = response.status + " " + response.data;
             })
             ['finally'](function () {
-                vm.sendingQuery = false;
-            });
+            vm.sendingQuery = false;
+        });
     };
 
     // Send Wikidata query
-    vm.sendWikidataRequest = function() {
+    vm.sendWikidataRequest = function () {
         var finalRequest = "";
-        _.each(vm.queryParts, function(part, index, list) {
-            if (part.queryType.length===0 || part.queryBody.length===0) {
+        _.each(vm.queryParts, function (part, index, list) {
+            if (part.queryType.length === 0 || part.queryBody.length === 0) {
                 return;
             }
             finalRequest += part.queryType + "[" + part.queryBody + "]";
-            if (index!==list.length-1) {
+            if (index !== list.length - 1) {
                 finalRequest += " AND ";
             }
         });
@@ -70,13 +71,30 @@ function dashboardController($log, wikidataService, PreferencesService) {
                 vm.queryResult = response.status + " " + response.data;
             })
             ['finally'](function () {
-                vm.sendingQuery = false;
-            });
-    }
+            vm.sendingQuery = false;
+        });
+    };
 
-    vm.saveEntities = function(data) {
-        
-    }
+    vm.saveWikidataResultOnDB = function () {
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'components/confirm/confirm-tmpl.html',
+            controller: 'confirmController as vm',
+            size: 'sm',
+            resolve: {
+                params: function () {
+                    return {
+                        title: "Save Wikidata?",
+                        message: "This action will place this article on persistent storage!"
+                    };
+                }
+            }
+        }).result.then(function (resposne) {
+
+        }, function (resposne) {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
 }
 
 angular.module('app').controller('dashboardController', dashboardController);
