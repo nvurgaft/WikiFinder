@@ -15,8 +15,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" uib-collapse="vm.collapsed">
                 <ul class="nav navbar-nav">
-                    <li dropdown class="dropdown">
-                        <a href dropdown-toggle class="dropdown-toggle">Query <span class="caret"></span></a>
+                    <li uib-dropdown class="dropdown">
+                        <a href uib-dropdown-toggle class="dropdown-toggle">Query <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li ui-sref-active="active"><a ui-sref="main.entry.dashboard">Wikidata</a></li>
                             <li ui-sref-active="active"><a ui-sref="main.entry.viaf-dashboard">VIAF</a></li>
@@ -28,8 +28,8 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li dropdown class="dropdown">
-                        <a href dropdown-toggle class="dropdown-toggle">
+                    <li uib-dropdown class="dropdown">
+                        <a href uib-dropdown-toggle class="dropdown-toggle">
                             Language: <img ng-src="{{vm.selectedLanguage.icon}}" alt="{{vm.selectedLanguage.value}}"/>
                             <span class="caret"></span>
                         </a>
@@ -41,8 +41,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li dropdown class="dropdown">
-                        <a href dropdown-toggle class="dropdown-toggle">Options <span class="caret"></span></a>
+                    <li uib-dropdown class="dropdown">
+                        <a href uib-dropdown-toggle class="dropdown-toggle">Options <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li ui-sref-active="active"><a ui-sref="main.entry.settings">Settings</a></li>
                             <li ui-sref-active="active"><a href>Help</a></li>

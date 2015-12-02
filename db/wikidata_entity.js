@@ -1,11 +1,12 @@
 /**
  * Created by Koby on 09-Nov-15.
  */
+"use strict";
 var WikidataEntity = require("../models/WikidataEntity");
 
 module.exports = function (router) {
 
-    var apiRoute = "/api/entities";
+    let apiRoute = "/api/entities";
 
     router.get(apiRoute, function (req, res) {
         WikidataEntity.find(function (err, entities) {

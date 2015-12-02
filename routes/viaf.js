@@ -1,16 +1,17 @@
 /**
  * Created by Koby on 25-Sep-15.
  */
+"use strict";
 var request = require('request');
 var _ = require('underscore');
 
 module.exports = function (router) {
 
-    var router_point = "/api/viaf";
-    var api_url = "https://www.viaf.org/viaf/";
+    let router_point = "/api/viaf";
+    let api_url = "https://www.viaf.org/viaf/";
 
     router.get(router_point, function (req, res) {
-        var viafId = req.query.vid,
+        let viafId = req.query.vid,
             format = req.query.format;
 
         if (_.isNaN(viafId)) {
@@ -18,7 +19,7 @@ module.exports = function (router) {
             return;
         }
 
-        var suffix = "/";
+        let suffix = "/";
         switch (format) {
             case "json":
                 suffix = "/justlinks.json";
@@ -38,8 +39,7 @@ module.exports = function (router) {
                 return;
         }
 
-        var url = [api_url, viafId, suffix].join('');
-        console.log("request url: " + url);
+        let url = [api_url, viafId, suffix].join('');
         request.get(url, function (error, response, body) {
             if (error) {
                 res.status(500).send(error);

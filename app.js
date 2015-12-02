@@ -1,3 +1,5 @@
+"use strict";
+// models
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -7,11 +9,17 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
 var request = require('request');
+var morgan = require('morgan');
+var FileStreamRotator = require('file-stream-rotator');
+var fs = require('fs');
 
-var app = express();
-var router = express.Router();
-
+// application
 var database = require('./config/database');
+var app = express();
+
+//////////////////
+//  database    //
+//////////////////
 mongoose.connect(database.url, function(err) {
     if (err) {
         console.log("ERROR: Could not connect to MongoDB service");
@@ -20,11 +28,37 @@ mongoose.connect(database.url, function(err) {
     }
 });
 
+//////////////////////////////
+//  setup morgan logging    //
+//////////////////////////////
+var logDir = __dirname + "/log";
+fs.existsSync(logDir) || fs.mkdirSync(logDir)
+
+var accessLogStream = FileStreamRotator.getStream({
+    filename: logDir + '/access-%DATE%.log',
+    frequency: 'daily',
+    verbose: false
+});
+
+app.use(morgan('combined', {stream: accessLogStream}))
+
+////////////////
+//  routing   //
+////////////////
+var router = express.Router();
+
+// routing database entities
 require('./db/wikidata_entity')(router);
 require('./db/viaf_entity')(router);
 
-app.use(cors());
+// routing http services
+require('./routes/wikidata')(router);
+require('./routes/viaf')(router);
 
+//////////////
+//  setup   //
+//////////////
+app.use(cors());
 app.use(favicon(__dirname + "/public/images/favicon/favicon.ico"));
 
 // view engine setup
@@ -38,14 +72,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-router.use(function(req, res, next) {
-    console.log("Serving " + req.method + " for " + req.url);
-    next();
-});
-
-require('./routes/wikidata')(router);
-require('./routes/viaf')(router);
 
 router.get('/', function(req, res) {
     res.sendFile()

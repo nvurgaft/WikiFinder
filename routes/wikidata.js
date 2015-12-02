@@ -1,6 +1,7 @@
 /**
  * Created by Koby on 25-Sep-15.
  */
+"use strict";
 var request = require('request');
 var _ = require('underscore');
 var Q = require('q');
@@ -15,10 +16,10 @@ module.exports = function (router) {
      */
     router.get(router_point + '/wikidata_api', function (req, res) {
 
-        var api_url = "https://wdq.wmflabs.org/api?q=",
+        let api_url = "https://wdq.wmflabs.org/api?q=",
             query = req.query.query;
 
-        var url = [api_url, query].join('');
+        let url = [api_url, query].join('');
         request(url, function (error, response, body) {
             if (error) {
                 res.status(500).send(error);
@@ -33,7 +34,7 @@ module.exports = function (router) {
      */
     router.get(router_point + '/q', function (req, res) {
 
-        var api_url = "https://www.wikidata.org/w/api.php",
+        let api_url = "https://www.wikidata.org/w/api.php",
             qItem = req.query.qItem,
             language = req.query.language;
 
@@ -43,13 +44,13 @@ module.exports = function (router) {
             return;
         }
 
-        var action = ['action', 'wbgetentities'].join('='),
+        let action = ['action', 'wbgetentities'].join('='),
             ids = ["ids", 'Q' + qItem].join('='),
             languages = ["languages", language].join('='),
             format = ["format", "json"].join('=');
 
-        var address_params = [action, ids, languages, format].join('&');
-        var url = [api_url, address_params].join('?');
+        let address_params = [action, ids, languages, format].join('&');
+        let url = [api_url, address_params].join('?');
 
         request(url, function (error, response, body) {
             if (error) {
@@ -65,7 +66,7 @@ module.exports = function (router) {
      *  Note: This method can return multiple entity items as a result
      */
     router.get(router_point + '/wbSearchEntities', function (req, res) {
-        var search = req.query.search,
+        let search = req.query.search,
             language = req.query.language,
             format = req.query.format,
             type = req.query.type;
@@ -91,7 +92,7 @@ module.exports = function (router) {
      *  Search Wikidata entities by entity name
      */
     router.get(router_point + '/get-entities-by-qid', function (req, res) {
-        var qItems = req.query.qItems,
+        let qItems = req.query.qItems,
             language = req.query.language,
             format = req.query.format;
 
@@ -102,8 +103,8 @@ module.exports = function (router) {
             }
         });
 
-        var formattedItems = qItems.join('|');
-        var url = [
+        let formattedItems = qItems.join('|');
+        let url = [
             "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=",
             formattedItems,
             "&languages=", language,
@@ -124,7 +125,7 @@ module.exports = function (router) {
      */
     router.get(router_point + '/get-claim-for-entity', function (res, req) {
 
-        var entity = req.params.entity,
+        let entity = req.params.entity,
             claim = req.params.claim,
             language = req.params.language;
 
@@ -133,7 +134,7 @@ module.exports = function (router) {
             return;
         }
 
-        var url = [
+        let url = [
             "https://www.wikidata.org/w/api.php?action=wbgetclaims",
             "&entity=" + entity,
             claim ? "&property=" + claim : "",
@@ -193,11 +194,11 @@ module.exports = function (router) {
      */
     router.get(router_point + "/get-entities-by-name", function (req, res) {
 
-            var entityName = req.query.entityName,      // full author name
+            let entityName = req.query.entityName,      // full author name
                 language = req.query.language,  // response data language
                 format = req.query.format;      // format (json is nice)
 
-            var url = [
+            let url = [
                 "https://www.wikidata.org/w/api.php?action=wbgetentities",
                 "&sites=", language, "wiki",
                 "&titles=", entityName,
@@ -211,7 +212,7 @@ module.exports = function (router) {
                 }
                 return body;
             }).then(function (response) {
-                var viafids = Utils.getViafIdentifier(response); // 214 is viaf id
+                let viafids = Utils.getViafIdentifier(response); // 214 is viaf id
                 res.json(viafids);
             }, function (error) {
                 res.status(500).json(error);

@@ -7,9 +7,9 @@
         <div class="panel-body">
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <tabset>
+                <uib-tabset>
                     <!-- plain qid -->
-                    <tab>
+                    <uib-tab>
                         <tab-heading>
                             <i class="fa fa-search"></i> Send VID
                         </tab-heading>
@@ -26,7 +26,7 @@
                                         </button>
                                         <!-- Single button using append-to-body -->
                                         <div class="btn-group" uib-dropdown dropdown-append-to-body>
-                                            <button id="btn-append-to-body" type="button" class="btn btn-info" dropdown-toggle>
+                                            <button id="btn-append-to-body" type="button" class="btn btn-info" uib-dropdown-toggle>
                                                 {{vm.selectedFormat.name}} <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" aria-labelledby="btn-append-to-body">
@@ -50,22 +50,22 @@
                                 </div>
                             </div>
                         </div>
-                    </tab>
+                    </uib-tab>
 
                     <!-- save -->
-                    <tab>
+                    <uib-tab>
                         <tab-heading>
                             <i class="fa fa-save"></i> Save
                         </tab-heading>
 
                         <p>save on db</p>
-                    </tab>
-                </tabset>
+                    </uib-tab>
+                </uib-tabset>
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <tabset>
-                    <tab>
+                <uib-tabset>
+                    <uib-tab>
                         <tab-heading>
                             <i class=""></i> Raw Response
                         </tab-heading>
@@ -85,8 +85,8 @@
                             <pre>{{vm.queryResult}}</pre>
                         </div>
 
-                    </tab>
-                    <tab ng-if="vm.selectedFormat.name==='json'">
+                    </uib-tab>
+                    <uib-tab ng-if="vm.selectedFormat.name==='json'">
                         <tab-heading>
                             <i class=""></i> Pretty JSON
                         </tab-heading>
@@ -102,8 +102,8 @@
                                 <h4>Nothing to show</h4>
                             </div>
                         </div>
-                    </tab>
-                    <tab ng-if="vm.selectedFormat.name!=='json'">
+                    </uib-tab>
+                    <uib-tab ng-if="vm.selectedFormat.name!=='json'">
                         <tab-heading>
                             <i class=""></i> Pretty Markup
                         </tab-heading>
@@ -119,8 +119,8 @@
                                 <h4>Nothing to show</h4>
                             </div>
                         </div>
-                    </tab>
-                    <tab>
+                    </uib-tab>
+                    <uib-tab>
                         <tab-heading>
                             <i class="fa fa-camera"></i> Preview
                         </tab-heading>
@@ -130,8 +130,8 @@
                         <div ng-hide="vm.sendingQuery">
                             <div ng-include="'viaf_dashboard/templates/article-details.html'"></div>
                         </div>
-                    </tab>
-                </tabset>
+                    </uib-tab>
+                </uib-tabset>
             </div>
         </div>
     </div>

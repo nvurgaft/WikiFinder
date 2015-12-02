@@ -1,11 +1,12 @@
 /**
  * Created by Koby on 09-Nov-15.
  */
+"use strict";
 var ViafEntity = require("../models/ViafEntity");
 
 module.exports = function (router) {
 
-    var apiRoute = "/api/articles";
+    let apiRoute = "/api/articles";
 
     router.get(apiRoute, function (req, res) {
         ViafEntity.find(function (err, entities) {
