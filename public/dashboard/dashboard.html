@@ -34,6 +34,7 @@
                                     ng-disabled="vm.queryResult.length===0"
                                     ng-click="vm.saveWikidataResultOnDB()">Save Wikidata Result
                             </button>
+                            <span ng-show="vm.savingWikidataResult"><i class="fa fa-spinner fa-spin"></i> Saving</span>
                         </div>
                     </uib-tab>
                 </uib-tabset>
@@ -49,7 +50,9 @@
                         <div class="center-block">
                             <form class="form-inline">
                                 <div class="form-group">
-                                    <button class="btn btn-default" ng-click="vm.queryResult=''">Clean</button>
+                                    <button class="btn btn-default" ng-click="vm.queryResult=''">
+                                        Clean
+                                    </button>
                                     <button class="btn btn-default" ng-disabled="!vm.queryResult"
                                             ng-click="vm.saveEntities(vm.queryResult)">Save
                                     </button>

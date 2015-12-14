@@ -10,11 +10,11 @@ function confirmController($uibModalInstance, params) {
     vm.message = params.message;
 
     vm.dismiss = function() {
-        $uibModalInstance.close();
+        $uibModalInstance.dismiss('cancel');
     };
 
     vm.ok = function() {
-        $uibModalInstance.dismiss();
+        $uibModalInstance.close('ok');
     }
 }
 

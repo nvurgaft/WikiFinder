@@ -1,9 +1,9 @@
 /**
  * Created by Koby on 06-Oct-15.
  */
-function databaseService($http, $log, $q, WIKIDATA_API_ROUTE) {
+function databaseService($http, $log, $q, WIKIDATA_SERVICE_API) {
 
-    var url = WIKIDATA_API_ROUTE;
+    var url = WIKIDATA_SERVICE_API;
     var serviceName = "databaseService";
 
     return {

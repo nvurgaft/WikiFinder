@@ -75,7 +75,9 @@ function dashboardController($log, wikidataService, PreferencesService, $uibModa
         });
     };
 
+    vm.savingWikidataResult = false;
     vm.saveWikidataResultOnDB = function () {
+        vm.savingWikidataResult = true;
         $uibModal.open({
             animation: true,
             templateUrl: 'components/confirm/confirm-tmpl.html',
@@ -89,8 +91,31 @@ function dashboardController($log, wikidataService, PreferencesService, $uibModa
                     };
                 }
             }
-        }).result.then(function (resposne) {
+        }).result.then(function (response) {
+            $log.info("Modal returned : " + response);
+            if (vm.queryResult) {
+                var obj = {
+                    id: vm.queryResult.id,
+                    modified: vm.queryResult.modified,
+                    type: vm.queryResult.type,
+                    title: vm.queryResult.title,
+                    labels: JSON.stringify(vm.queryResult.labels),
+                    descriptions: JSON.stringify(vm.queryResult.descriptions),
+                    aliases: JSON.stringify(vm.queryResult.aliases),
+                    claims: JSON.stringify(vm.queryResult.claims),
+                    sitelinks: JSON.stringify(vm.queryResult.sitelinks)
+                };
 
+                wikidataService.storeWikidataEntityMetadata(obj).then(function (response) {
+                    $log.info(response.status + " : " + response.data);
+                }, function (response) {
+                    $log.error(response.status + " : " + response.data);
+                })['catch'](function (err) {
+                    throw err;
+                })['finally'](function () {
+                    vm.savingWikidataResult = false;
+                });
+            }
         }, function (resposne) {
             $log.info('Modal dismissed at: ' + new Date());
         });

@@ -83,7 +83,7 @@ function linkerController($log, wikidataService, viafService, PreferencesService
                 vm.testResponse = JSON.parse(response.data);
                 vm.processViafRequest(vm.testResponse);
             }, function (response) {
-                vm.testResponse = JSON.parse(response.status + " : " + response.data);
+                $log.debug(response.status + " : " + response.data);
             })
             .finally(function () {
                 vm.processingWikidataSegment = false;

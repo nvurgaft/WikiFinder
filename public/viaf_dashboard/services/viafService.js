@@ -1,9 +1,9 @@
 /**
  * Created by Koby on 26-Sep-15.
  */
-function viafService($http, $log, VIAF_API_ROUTE, $q) {
+function viafService($http, $log, WIKIDATA_SERVICE_API, $q) {
 
-    var url = VIAF_API_ROUTE;
+    var url = WIKIDATA_SERVICE_API;
     var serviceName = "viafService";
 
     return {

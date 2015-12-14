@@ -2,19 +2,20 @@
     <div class="panel-body">
         <p>Enter an <a href="http://wdq.wmflabs.org/">wdq.wmflabs.org</a> API query in this text box and click Send.</p>
 
-        <div class="col-lg-1">
-            <div class="input-group" style="margin-top: 1em;">
-                <button class="btn btn-danger"
-                        ng-click="vm.addQueryPart()"
-                        tooltip="Add query parameter">
-                    <span class="fa fa-plus"></span> Add
-                </button>
-            </div>
-        </div>
-
-        <div class="col-lg-10">
-            <div ng-repeat="part in vm.queryParts">
+        <div class="row">
+            <div class="col-lg-1">
                 <div class="input-group" style="margin-top: 1em;">
+                    <button class="btn btn-danger"
+                            ng-click="vm.addQueryPart()"
+                            tooltip="Add query parameter">
+                        <span class="fa fa-plus"></span> Add
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-lg-10">
+                <div ng-repeat="part in vm.queryParts">
+                    <div class="input-group" style="margin-top: 1em;">
                     <span class="input-group-btn">
                         <button class="btn btn-success"
                                 ng-click="vm.removeQueryPart($index)"
@@ -24,32 +25,37 @@
                         </button>
                     </span>
 
-                    <div class="input-group-btn" uib-dropdown dropdown-append-to-body>
-                        <button id="btn-append-to-body" type="button" class="btn btn-info dropdown-toggle" uib-dropdown-toggle>
-                            {{part.queryType ? part.queryType : "Select Query Type"}} <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li role="menuitem" ng-repeat="item in vm.queryTypes" ng-click="part.queryType = item"><a ng-href="#">{{item}}</a></li>
-                        </ul>
-                    </div>
-                    <input type="text" class="form-control" ng-model="part.queryBody" placeholder="Type query here..">
+                        <div class="input-group-btn" uib-dropdown dropdown-append-to-body>
+                            <button id="btn-append-to-body" type="button" class="btn btn-info dropdown-toggle"
+                                    uib-dropdown-toggle>
+                                {{part.queryType ? part.queryType : "Select Query Type"}} <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li role="menuitem" ng-repeat="item in vm.queryTypes" ng-click="part.queryType = item">
+                                    <a ng-href="#">{{item}}</a></li>
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control" ng-model="part.queryBody"
+                               placeholder="Type query here..">
                     <span class="input-group-btn">
                         <button class="btn btn-warning" ng-click="part.queryBody = ''">
                             <span class="fa fa-trash"></span>
                         </button>
                     </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-1">
+                <div class="input-group" style="margin-top: 1em;">
+                    <button class="btn btn-primary"
+                            ng-click="vm.sendWikidataRequest()">
+                        <i class="fa fa-paper-plane"></i> Send
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-1">
-            <div class="input-group" style="margin-top: 1em;">
-                <button class="btn btn-primary"
-                        ng-click="vm.sendWikidataRequest()">
-                    <i class="fa fa-paper-plane"></i> Send
-                </button>
-            </div>
-        </div>
         <a ng-click="vm.wikidataQueryCollapse=!vm.wikidataQueryCollapse" style="cursor: pointer;">More info...</a>
 
         <div uib-collapse="vm.wikidataQueryCollapse">

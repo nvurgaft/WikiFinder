@@ -32,11 +32,6 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: 'linker/linker.html',
             controller: 'linkerController as vm'
         })
-        .state('main.entry.dumper', {
-            url: '/dumper',
-            templateUrl: 'dump/dumper.html',
-            controller: 'dumperController as vm'
-        })
         .state('main.entry.database', {
             url: '/database',
             templateUrl: 'database/database.html',
@@ -51,6 +46,7 @@ function config($stateProvider, $urlRouterProvider) {
 
 angular
     .module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'angular-json-tree', 'ngAnimate', 'smart-table'])
-    .value("WIKIDATA_API_ROUTE", "./api/wikidata")
+    .value("WIKIDATA_SERVICE_API", "./api/wikidata")
+    .value("WIKIDATA_PERSISTENT_API", "./api/entities")
     .value("VIAF_API_ROUTE", "./api/viaf")
     .config(config);

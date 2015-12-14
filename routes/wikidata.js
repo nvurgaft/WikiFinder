@@ -4,8 +4,9 @@
 "use strict";
 var request = require('request');
 var _ = require('underscore');
-var Q = require('q');
+var Promise = require('q');
 var Utils = require('./utils/wikidataRouteUtils');
+var Article = require("../models/RawArticle");
 
 module.exports = function (router) {
 
@@ -17,6 +18,7 @@ module.exports = function (router) {
     router.get(router_point + '/wikidata_api', function (req, res) {
 
         let api_url = "https://wdq.wmflabs.org/api?q=",
+            language = req.param.lang,
             query = req.query.query;
 
         let url = [api_url, query].join('');
@@ -25,7 +27,57 @@ module.exports = function (router) {
                 res.status(500).send(error);
                 return;
             }
-            res.json(body);
+
+            let obj = JSON.parse(body);
+            //let status = obj.status;
+            let items = obj.items.slice(0, 20);
+
+            console.log("items to insert : " + items);
+            if (_.isArray(items)) {
+                let promiseChain = _.map(items, (qid) => {
+
+                    let deferred = Promise.defer();
+                    let api_url = "https://www.wikidata.org/w/api.php";
+                    let ids = ["ids", 'Q' + qid].join('='),
+                        languages = ["languages", language].join('=');
+
+                    let address_params = ["action=wbgetentities", ids, languages, "format=json"].join('&');
+                    let address = [api_url, address_params].join('?');
+                    // call for a query here
+                    request(address, function (error, response, body) {
+                        if (error) {
+                            deferred.reject(error);
+                        }
+                        deferred.resolve(body);
+                    });
+                    return deferred.promise;
+                });
+
+                Promise.all(promiseChain).then(function (results) {
+
+                    console.log("Promise.all(..) length: " + results.length);
+                    // store any fetched data onto mongo
+                    results.forEach((result) => {
+                        Article.collection.insert({
+                            data: result
+                        }, (err) => {
+                            if (err) {
+                                console.log("Error: " + err);
+                                res.send(err);
+                            }
+                            console.log("Inserted documents");
+                        });
+                    });
+
+                }, function (error) {
+                    console.log("There was an error processing the promise chain")
+                }).catch(function (err) {
+                    throw err;
+                }).finally(function () {
+                    res.json(body);
+                    console.log("Done");
+                });
+            }
         })
     });
 
@@ -50,9 +102,9 @@ module.exports = function (router) {
             format = ["format", "json"].join('=');
 
         let address_params = [action, ids, languages, format].join('&');
-        let url = [api_url, address_params].join('?');
+        let address = [api_url, address_params].join('?');
 
-        request(url, function (error, response, body) {
+        request(address, function (error, response, body) {
             if (error) {
                 res.status(500).json(error);
                 return;
@@ -167,12 +219,14 @@ module.exports = function (router) {
         ].join("");
 
 
-        request.get(url, function (error, response, body) {
-            if (error) {
-                Q.reject(error);
-            } else {
-                return body;
-            }
+        new Promise(function (resolve, reject) {
+            request.get(url, function (error, response, body) {
+                if (error) {
+                    return resolve(error);
+                } else {
+                    return reject(body);
+                }
+            })
         }).then(function (res_url) {
             request.get(res_url, function (error, response, body) {
                 if (error) {
@@ -187,6 +241,10 @@ module.exports = function (router) {
         }).catch(function (err) {
             res.status(500).send(err);
         });
+    });
+
+    router.post(router_point + "/store-entity-meta", function (req, res) {
+
     });
 
     /**
@@ -206,11 +264,13 @@ module.exports = function (router) {
                 "&format=", format
             ].join("");
 
-            request.get(url, function (error, response, body) {
-                if (error) {
-                    return Q.reject(error);
-                }
-                return body;
+            new Promise(function (resolve, reject) {
+                request.get(url, function (error, response, body) {
+                    if (error) {
+                        return reject(error);
+                    }
+                    return resolve(body);
+                })
             }).then(function (response) {
                 let viafids = Utils.getViafIdentifier(response); // 214 is viaf id
                 res.json(viafids);

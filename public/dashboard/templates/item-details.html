@@ -7,7 +7,8 @@
 <div ng-if="vm.queryResult.labels">
     <label>Lables</label>
     <ul class="list-group" style="max-height: 16em; overflow-y: auto;">
-        <li class="list-group-item" ng-repeat="label in vm.queryResult.labels">{{label.language}}, {{label.value}}</li>
+        <li class="list-group-item">English: {{vm.queryResult.sitelinks.enwiki.title}}</li>
+        <li class="list-group-item">Hebrew: {{vm.queryResult.sitelinks.hewiki.title}}</li>
     </ul>
 </div>
 
@@ -37,8 +38,8 @@
             <ul class="list-group" style="max-height: 24em; overflow-y: auto;">
                 <li class="list-group-item" ng-repeat="(key, value) in vm.queryResult.claims">{{key}}
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="c in value">
-                            {{c}}
+                        <li class="list-group-item" ng-repeat="claims in value">
+                            {{claims}}
                         </li>
                     </ul>
                 </li>

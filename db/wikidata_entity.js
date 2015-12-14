@@ -2,14 +2,14 @@
  * Created by Koby on 09-Nov-15.
  */
 "use strict";
-var WikidataEntity = require("../models/WikidataEntity");
+var WikidataEntity = require("../models/WikidataValue");
 
 module.exports = function (router) {
 
     let apiRoute = "/api/entities";
 
     router.get(apiRoute, function (req, res) {
-        WikidataEntity.find(function (err, entities) {
+        WikidataEntity.find((err, entities) => {
             if (err) {
                 res.send(err);
             }
@@ -18,7 +18,9 @@ module.exports = function (router) {
     });
 
     router.get(apiRoute + "/:qid", function (req, res) {
-        WikidataEntity.findOne({"qid": req.params.qid}, function (err, entity) {
+        WikidataEntity.findOne({
+            "qid": req.params.qid
+        }, (err, entity) => {
             if (err) {
                 res.send(err);
             }
@@ -28,14 +30,18 @@ module.exports = function (router) {
 
     router.post(apiRoute, function (req, res) {
         WikidataEntity.create({
-            qid: req.body.qid,
-            dateCreated: Date.now(),
-            lastUpdated: Date.now(),
-            name: req.body.name,
-            instanceOf: req.body.instanceOf,
-            viafIndentifier: req.body.vid,
-            nliIdentifier: req.body.nlid
-        }, function (err, entity) {
+            id: req.body.id,
+            dateRecordCreated: new Date(),
+            modified: req.body.modified,
+            type: req.body.type,
+            title: req.body.title,
+            labels: req.body.labels,
+            descriptions: req.body.descriptions,
+            aliases: req.body.aliases,
+            claims: req.body.claims,
+            sitelinks: req.body.sitelinks,
+            missing: req.body.missing || ""
+        }, (err) => {
             if (err) res.send(err);
             WikidataEntity.find(function (err, entities) {
                 if (err) {
@@ -52,7 +58,7 @@ module.exports = function (router) {
                 res.send(err);
             }
             entity.qid = req.body.qid;
-            entity.lastUpdated = Date.now(),
+            entity.lastUpdated = Date();
             entity.name = req.body.name;
             entity.instanceOf = req.body.instanceOf;
             entity.viafIndentifier = req.body.vid;
@@ -68,9 +74,9 @@ module.exports = function (router) {
     });
 
     router.delete(apiRoute + "/:id", function (req, res) {
-        WikidataEntity.findOne({'qid': req.params.qid}, function(err, entity) {
+        WikidataEntity.findOne({'qid': req.params.qid}, function (err, entity) {
             if (err) res.send(err);
-            entity.remove(function(err) {
+            entity.remove(function (err) {
                 if (err) res.send(err);
                 res.json({"message": req.params.qid + " was successfully deleted"})
             })

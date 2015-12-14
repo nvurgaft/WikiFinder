@@ -1,10 +1,10 @@
 /**
  * Created by Koby on 25-Sep-15.
  */
-function dashboardService($http, $log, WIKIDATA_API_ROUTE) {
+function dashboardService($http, $log, WIKIDATA_SERVICE_API) {
 
     var serviceName = "dashboardService";
-    var url = WIKIDATA_API_ROUTE + "/";
+    var url = WIKIDATA_SERVICE_API + "/";
 
     return {
         sendWikidataRawQuery: function(query) {
