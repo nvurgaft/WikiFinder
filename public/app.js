@@ -1,7 +1,6 @@
 /**
  * Created by Koby on 25-Sep-15.
  */
-'use strict';
 
 function config($stateProvider, $urlRouterProvider) {
 

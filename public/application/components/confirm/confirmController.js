@@ -15,7 +15,7 @@ function confirmController($uibModalInstance, params) {
 
     vm.ok = function() {
         $uibModalInstance.close('ok');
-    }
+    };
 }
 
 angular.module('app').controller('confirmController', confirmController);

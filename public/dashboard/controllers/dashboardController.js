@@ -116,7 +116,7 @@ function dashboardController($log, wikidataService, PreferencesService, $uibModa
                     vm.savingWikidataResult = false;
                 });
             }
-        }, function (resposne) {
+        }, function (response) {
             $log.info('Modal dismissed at: ' + new Date());
         });
     };

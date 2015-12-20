@@ -1,7 +1,7 @@
 /**
  * Created by Koby on 16-Oct-15.
  */
-function PreferencesService($log) {
+function PreferencesService() {
 
     var languageList = [
         {
@@ -13,7 +13,7 @@ function PreferencesService($log) {
             caption: "Hebrew",
             value: "he",
             icon : "images/flags/he.png"
-        },
+        }
     ];
     var language = languageList[0];
 
@@ -22,7 +22,6 @@ function PreferencesService($log) {
             return languageList;
         },
         getLanguage: function() {
-            $log.debug("language: " + JSON.stringify(language));
             return language;
         },
         setLanguage: function(lang) {
@@ -32,7 +31,6 @@ function PreferencesService($log) {
                     return true;
                 } else return false;
             });
-            $log.debug("language set to: " + JSON.stringify(language));
             return r;
         }
     };

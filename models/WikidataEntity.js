@@ -3,7 +3,7 @@
  */
 var mongoose = require('mongoose');
 
-module.exports = mongoose.model("WikidataValue", {
+module.exports = mongoose.model("WikidataEntity", {
     id: String,
     dateCreated: {
         type: Date

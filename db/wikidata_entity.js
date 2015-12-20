@@ -2,7 +2,7 @@
  * Created by Koby on 09-Nov-15.
  */
 "use strict";
-var WikidataEntity = require("../models/WikidataValue");
+var WikidataEntity = require("../models/WikidataEntity");
 
 module.exports = function (router) {
 
